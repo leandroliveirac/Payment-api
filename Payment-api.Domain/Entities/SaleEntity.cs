@@ -8,21 +8,19 @@ namespace Payment_api.Domain.Entities
 
         public DateTime Moment { get; private set; }
         public SaleStatus Status { get; private set; }
-        public decimal Total { get; private set; }
         public Guid SellerId { get; private set; }
-        public IEnumerable<Guid> OrderItemsId { get; private set; }
+        public Guid OrderId { get; private set; }
 
-        public virtual IEnumerable<OrderItem>? OrderItems { get; set; }
+        public virtual OrderEntity? Order { get; set; }
         public virtual SellerEntity? Seller { get; set; }
 
-        public SaleEntity(Guid sellerId, IEnumerable<Guid> orderItemsId)
+        public SaleEntity(Guid sellerId, Guid orderId)
         {
-            Validate(sellerId,orderItemsId);
-            Id = Guid.NewGuid();
+            Validate(sellerId, orderId);
             Moment = DateTime.Now;
             Status = SaleStatus.AWAITING_PAYMENT;
             SellerId = sellerId;
-            OrderItemsId = orderItemsId;
+            OrderId = orderId;
         }        
 
         public void UpdateStatus(SaleStatus status)
@@ -51,15 +49,10 @@ namespace Payment_api.Domain.Entities
             Status = status;
         }
 
-        private void Validate(Guid sellerId, IEnumerable<Guid> orderItemsId)
-        {
-            
+        private void Validate(Guid sellerId, Guid orderId)
+        {            
             DomainExceptionValidation.When(sellerId == Guid.Empty, "Invalid sellerId value");
-
-            orderItemsId.ToList().ForEach( p => {
-                DomainExceptionValidation.When(p == Guid.Empty, "Invalid orderItemId value");
-            });
-            
+            DomainExceptionValidation.When(orderId == Guid.Empty, "Invalid order value");            
         }
 
     }

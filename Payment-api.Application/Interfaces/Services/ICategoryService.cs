@@ -1,0 +1,16 @@
+using Payment_api.Application.InputModels;
+using Payment_api.Application.ViewModels;
+
+namespace Payment_api.Application.Interfaces.Services
+{
+    public interface ICategoryService 
+    {
+        Task<IEnumerable<CategoryViewModel>> GetAllAsync();
+        Task<CategoryViewModel> GetByIdAsync(Guid id);
+        Task<CategoryViewModel> GetByDescriptionAsync(string description);
+        Task<CategoryViewModel> CreateAsync(CategoryInputModel entity);
+        CategoryViewModel Update(Guid id, string newDescription);
+        void Remove(CategoryInputModel entity);
+
+    }
+}

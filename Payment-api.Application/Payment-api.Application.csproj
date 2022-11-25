@@ -4,8 +4,18 @@
     <TargetFramework>net6.0</TargetFramework>
     <RootNamespace>Payment_api.Application</RootNamespace>
     <ImplicitUsings>enable</ImplicitUsings>
-    <Nullable>enable</Nullable>
+    <Nullable>disable</Nullable>
   </PropertyGroup>
+
+  <ItemGroup>
+    <Compile Remove="DTOs\BaseDTO.cs" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <PackageReference Include="AutoMapper" Version="12.0.0" />
+    <PackageReference Include="Microsoft.EntityFrameworkCore" Version="6.0.11" />
+    <PackageReference Include="Newtonsoft.Json" Version="9.0.1" />
+  </ItemGroup>
 
   <ItemGroup>
     <ProjectReference Include="..\payment-api.Domain\payment-api.Domain.csproj" />

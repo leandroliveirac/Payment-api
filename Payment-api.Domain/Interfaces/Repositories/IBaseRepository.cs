@@ -4,8 +4,8 @@ namespace Payment_api.Domain.Interfaces.Repositories
     {
         Task<IEnumerable<Entity>> GetAllAsync();
         Task<Entity> GetByIdAsync(Guid id);
-        Task InsertAsync(Entity entity);
-        Task UpdateAsync(Entity entity);
-        Task RemoveAsync(Entity entity);
+        Task CreateAsync(Entity entity);
+        void Update(Entity entity);
+        void Remove(Entity entity);
     }
 }
