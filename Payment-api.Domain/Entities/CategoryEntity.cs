@@ -4,23 +4,21 @@ namespace Payment_api.Domain.Entities
 {
     public class CategoryEntity : BaseEntity
     {
-
         public string Description { get; private set; }
 
-         public CategoryEntity(string description)
+        public CategoryEntity(string description)
         {
             Validate(description);
-            Id = Guid.NewGuid();
             Description = description;
         }
 
         public void Update(string description)
         {
-            Validate(description);
-            Description = description;
+            Validate(description.Trim());
+            Description = description.Trim();
         }
 
-        public void Validate(string description)
+        private void Validate(string description)
         {
             DomainExceptionValidation.When(string.IsNullOrEmpty(description),"Invalid description. Description is required");
         }       

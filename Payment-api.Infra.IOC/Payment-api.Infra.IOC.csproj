@@ -9,8 +9,18 @@
 
   <ItemGroup>
     <ProjectReference Include="..\payment-api.Infra.Data\payment-api.Infra.Data.csproj" />
-    <ProjectReference Include="..\payment-api.Domain\payment-api.Dmain.csproj" />
     <ProjectReference Include="..\payment-api.Application\payment-api.Application.csproj" />
   </ItemGroup>
+
+  <ItemGroup>
+    <PackageReference Include="AutoMapper.Extensions.Microsoft.DependencyInjection" Version="12.0.0" />
+    <PackageReference Include="Microsoft.EntityFrameworkCore.Sqlite" Version="6.0.11" />
+    <!-- <PackageReference Include="Microsoft.EntityFrameworkCore.Sqlite.Core" Version="6.0.11" /> -->
+    <PackageReference Include="Microsoft.EntityFrameworkCore.Tools" Version="6.0.11">
+    <PrivateAssets>all</PrivateAssets>
+      <IncludeAssets>runtime; build; native; contentfiles; analyzers</IncludeAssets>
+    </PackageReference>
+    <PackageReference Include="Microsoft.Extensions.Configuration" Version="6.0.1" />
+  </ItemGroup>  
 
 </Project>

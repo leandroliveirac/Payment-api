@@ -9,21 +9,38 @@ namespace Payment_api.Domain.Entities
         public DateTime Date { get; private set; }
         public OrderStatus Status { get; private set; }
 
-         public OrderEntity()
+        public IEnumerable<OrderItemEntity>? Items { get; set; }
+
+        public OrderEntity()
         {
-            Id = Guid.NewGuid();
             Date = DateTime.Now;
             Status = OrderStatus.PROCESSING;
         }
-        public void Update(OrderStatus status)
+        public void UpdateStatus(OrderStatus status)
         {
-            Validate(status);
-            Status = status;
 
-        }
-        public void Validate(OrderStatus status)
-        {
-            DomainExceptionValidation.When(Status.Equals(OrderStatus.CANCELED),"Invalid transaction. Generate new order");
+            switch (Status)
+            {
+                case OrderStatus.PROCESSING:
+                    DomainExceptionValidation.When(status != OrderStatus.PROCESSING && status != OrderStatus.SENT && status != OrderStatus.CANCELED, "Invalid transaction, valid sequence SENT or CANCELED");
+                    break;
+                case OrderStatus.SENT:
+                    DomainExceptionValidation.When(status != OrderStatus.SENT && status != OrderStatus.DELIVERED && status != OrderStatus.CANCELED, "Invalid transaction, valid sequence DELIVERED or CANCELED");
+                    break;
+                case OrderStatus.DELIVERED:
+                    DomainExceptionValidation.When(status != OrderStatus.DELIVERED && status != OrderStatus.RETURNED, "Invalid transaction, valid sequence RETURNED");
+                    break;
+                case OrderStatus.CANCELED:
+                    DomainExceptionValidation.When(status != OrderStatus.CANCELED, "Invalid transaction. Generate new order");
+                    break;
+                case OrderStatus.RETURNED:
+                    DomainExceptionValidation.When(status != OrderStatus.RETURNED && status != OrderStatus.SENT && status != OrderStatus.CANCELED, "Invalid transaction. valid sequence SENT or CANCELED.");
+                    break;
+                default:
+                    break;
+            }
+
+            Status = status;
         }
     }
 }
