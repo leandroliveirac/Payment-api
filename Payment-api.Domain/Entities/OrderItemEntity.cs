@@ -10,6 +10,10 @@ namespace Payment_api.Domain.Entities
         public virtual ProductEntity? Product { get; set; }
         public virtual OrderEntity? Order { get; set; }
 
+        private OrderItemEntity()
+        {            
+        }
+
         public OrderItemEntity(int quantity, Guid productId, Guid orderId)
         {
             Validate(quantity);

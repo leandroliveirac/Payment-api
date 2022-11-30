@@ -10,6 +10,6 @@ namespace Payment_api.Application.Interfaces.Services
         Task<IEnumerable<ProductViewModel>> GetByDescriptionAsync(string description);
         Task<ProductViewModel> CreateAsync(ProductInputModel entity);
         ProductViewModel Update(ProductInputModel entity, Guid productId);
-        void Remove(ProductInputModel entity, Guid productId);
+        void Remove(Guid productId);
     }
 }

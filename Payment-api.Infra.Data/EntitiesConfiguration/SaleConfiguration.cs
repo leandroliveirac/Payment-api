@@ -16,7 +16,7 @@ namespace Payment_api.Infra.Data.EntitiesConfiguration
             builder.Property(x => x.Moment).HasColumnName("MOMENT").IsRequired();
             builder.Property(x => x.SellerId).HasColumnName("ID_SELLER").IsRequired();
             builder.Property(x => x.OrderId).HasColumnName("ID_ORDER").IsRequired();
-            builder.Property(x => x.Status).HasColumnName("STATUS").IsRequired();
+            builder.Property(x => x.Status).HasColumnName("STATUS").HasConversion<string>().IsRequired();
 
             builder.HasOne(x => x.Seller)
                 .WithMany()
@@ -24,7 +24,7 @@ namespace Payment_api.Infra.Data.EntitiesConfiguration
 
             builder.HasOne(x => x.Order)
                 .WithMany()
-                .HasForeignKey(x => x.Id);
+                .HasForeignKey(x => x.OrderId);
         }
     }
 }

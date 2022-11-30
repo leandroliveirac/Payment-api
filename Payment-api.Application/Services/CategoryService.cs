@@ -44,22 +44,23 @@ namespace Payment_api.Application.Services
             return _mapper.Map<CategoryViewModel>(category);
         }
 
-        public void Remove(CategoryInputModel entity)
+        public void Remove(Guid id)
         {
-            var category =  _categoryRepository.GetByDescriptionAsync(entity.Description).Result;
+            var category =  _categoryRepository.GetByIdAsync(id).Result;
             if (category == null)
                 throw new NullReferenceException();
             
             _categoryRepository.Remove(category);
         }
 
-        public CategoryViewModel Update(Guid id, string newDescription)
+        public CategoryViewModel Update(Guid id, CategoryInputModel entity)
         {
             var category = _categoryRepository.GetByIdAsync(id).Result;
             if (category == null)
                 throw new NullReferenceException();
 
-            category.Update(newDescription);
+            category.Update(entity.Description);
+
             _categoryRepository.Update(category);
 
             return _mapper.Map<CategoryViewModel>(category);

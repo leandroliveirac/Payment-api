@@ -8,7 +8,7 @@ using Payment_api.Domain.Validation;
 
 namespace Payment_api.Application.Services
 {
-    public class SellerService : ISellerService
+    public sealed class SellerService : ISellerService
     {
         private readonly ISellerRepository _sellerRepository;
         private readonly IPhoneRepository _phoneRepository;

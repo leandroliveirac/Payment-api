@@ -10,23 +10,23 @@ namespace Payment_api.Application.Mappers
         public MapperConfigProfile()
         {
             #region  InputModel
-            CreateMap<CategoryEntity,CategoryInputModel>().ReverseMap();
-            CreateMap<ProductEntity,ProductInputModel>().ReverseMap();
-            CreateMap<SaleEntity,SaleInputModel>().ReverseMap();
-            CreateMap<SellerEntity,SellerInputModel>().ReverseMap();
-            CreateMap<OrderEntity,OrderInputModel>().ReverseMap();
-            CreateMap<OrderItemEntity,OrderItemInputModel>().ReverseMap();
-            CreateMap<PhoneEntity,PhoneInputModel>().ReverseMap();
+            CreateMap<CategoryInputModel, CategoryEntity>();
+            CreateMap<ProductInputModel, ProductEntity>();
+            CreateMap<SaleInputModel, SaleEntity>();
+            CreateMap<SellerInputModel, SellerEntity>();
+            CreateMap<OrderInputModel, OrderEntity>();
+            CreateMap<OrderItemInputModel, OrderItemEntity>();
+            CreateMap<PhoneInputModel, PhoneEntity>();
             #endregion
 
             #region ViewModel
-            CreateMap<CategoryEntity,CategoryViewModel>().ReverseMap();
-            CreateMap<ProductEntity,ProductViewModel>().ReverseMap();
-            CreateMap<SaleEntity,SaleViewModel>().ReverseMap();
-            CreateMap<SellerEntity,SellerViewModel>().ReverseMap();
-            CreateMap<OrderEntity,OrderViewModel>().ReverseMap();
-            CreateMap<OrderItemEntity,OrderItemViewModel>().ReverseMap();
-            CreateMap<PhoneEntity,PhoneViewModel>().ReverseMap();
+            CreateMap<CategoryEntity,CategoryViewModel>();
+            CreateMap<ProductEntity,ProductViewModel>();
+            CreateMap<SaleEntity,SaleViewModel>();
+            CreateMap<SellerEntity,SellerViewModel>();
+            CreateMap<OrderEntity,OrderViewModel>();
+            CreateMap<OrderItemEntity,OrderItemViewModel>();
+            CreateMap<PhoneEntity,PhoneViewModel>();
             #endregion
         }
     }

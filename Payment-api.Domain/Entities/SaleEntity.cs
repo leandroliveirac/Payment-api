@@ -31,11 +31,11 @@ namespace Payment_api.Domain.Entities
                     DomainExceptionValidation.When(status != SaleStatus.CANCELED,"Invalid transaction. Generate new sale");
                     break;
                 case SaleStatus.AWAITING_PAYMENT:
-                    DomainExceptionValidation.When(status != SaleStatus.PAYMENT_ACCEPT || status != SaleStatus.CANCELED,
+                    DomainExceptionValidation.When(status != SaleStatus.PAYMENT_ACCEPT && status != SaleStatus.CANCELED,
                                 "Invalid transaction, update : awaiting payment for approved payment or awaiting payment for canceled sale");
                     break;
                 case SaleStatus.PAYMENT_ACCEPT:
-                    DomainExceptionValidation.When(status != SaleStatus.SENT_CARRIER || status != SaleStatus.CANCELED,
+                    DomainExceptionValidation.When(status != SaleStatus.SENT_CARRIER && status != SaleStatus.CANCELED,
                                 "Invalid transaction, update: approved payment for Shipped to Carrier or approved payment for canceled sale");
                     break;
                 case SaleStatus.SENT_CARRIER:

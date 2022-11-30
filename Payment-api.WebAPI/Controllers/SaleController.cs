@@ -18,12 +18,12 @@ namespace Payment_api.WebAPI.Controllers
         }
 
         [HttpGet]
-        [Route("{saleId}", Name = "getSaleById")]
+        [Route("{id:Guid}", Name = "getSaleById")]
         [ProducesResponseType(StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status404NotFound)]
-        public async Task<ActionResult<SaleViewModel>> GetByIdAsync([FromRoute] Guid saleId)
+        public async Task<ActionResult<SaleViewModel>> GetByIdAsync([FromRoute] Guid id)
         {
-            var seller = await _saleService.GetByIdAsync(saleId);
+            var seller = await _saleService.GetByIdAsync(id);
 
             if(seller == null)
                 return NotFound();
@@ -32,15 +32,15 @@ namespace Payment_api.WebAPI.Controllers
         }
 
         [HttpPost]        
-        [ProducesResponseType(StatusCodes.Status200OK)]
+        [ProducesResponseType(StatusCodes.Status201Created)]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
-        public async Task<IActionResult> CreateAsync([FromBody] SaleInputModel entity)
+        public async Task<ActionResult<SaleViewModel>> CreateAsync([FromBody] SaleInputModel entity)
         {         
 
             try
             {
-                await _saleService.CreateAsync(entity);
-                return Ok();
+                var sale = await _saleService.CreateAsync(entity);
+                return CreatedAtRoute("getSaleById",new {id = sale.Id},sale);
             }
             catch (Exception ex)
             {                
@@ -48,31 +48,79 @@ namespace Payment_api.WebAPI.Controllers
             }
         }
 
-
-        [HttpPut]
-        [ProducesResponseType(StatusCodes.Status200OK)]
-        [ProducesResponseType(StatusCodes.Status400BadRequest)]
-        public IActionResult Update([FromBody] SaleInputModel entity, Guid saleId)
-        {
-            try
-            {
-                _saleService.UpdateStatus(saleId, entity.Status);
-                return Ok();
-            }
-            catch (Exception ex)
-            {                
-                return BadRequest($"An error occurred while trying to execute your request: \n {ex.Message}");
-            }
-        }
-
-        [HttpDelete]
+        [HttpPut("canceled/{id:Guid}")]
         [ProducesResponseType(StatusCodes.Status204NoContent)]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
-        public IActionResult Delete([FromBody] SaleInputModel entity, Guid saleId)
+        public IActionResult Canceled([FromRoute] Guid id)
         {
             try
             {
-                _saleService.Remove(entity, saleId);
+                _saleService.Canceled(id);
+                return NoContent();
+            }
+            catch (Exception ex)
+            {                
+                return BadRequest($"An error occurred while trying to execute your request: \n {ex.Message}");
+            }
+        }
+
+        [HttpPut("payment-accept/{id:Guid}")]
+        [ProducesResponseType(StatusCodes.Status204NoContent)]
+        [ProducesResponseType(StatusCodes.Status400BadRequest)]
+        public IActionResult PaymentAccept([FromRoute] Guid id)
+        {
+            try
+            {
+                _saleService.PaymentAccept(id);
+                return NoContent();
+            }
+            catch (Exception ex)
+            {                
+                return BadRequest($"An error occurred while trying to execute your request: \n {ex.Message}");
+            }
+        }
+
+        [HttpPut("sent-carrier/{id:Guid}")]
+        [ProducesResponseType(StatusCodes.Status204NoContent)]
+        [ProducesResponseType(StatusCodes.Status400BadRequest)]
+        public IActionResult SentCarrier([FromRoute] Guid id)
+        {
+            try
+            {
+                _saleService.SentCarrier(id);
+                return NoContent();
+            }
+            catch (Exception ex)
+            {                
+                return BadRequest($"An error occurred while trying to execute your request: \n {ex.Message}");
+            }
+        }
+
+        [HttpPut("delivered/{id:Guid}")]
+        [ProducesResponseType(StatusCodes.Status204NoContent)]
+        [ProducesResponseType(StatusCodes.Status400BadRequest)]
+        public IActionResult Delivered([FromRoute] Guid id)
+        {
+            try
+            {
+                _saleService.Delivered(id);
+                return NoContent();
+            }
+            catch (Exception ex)
+            {                
+                return BadRequest($"An error occurred while trying to execute your request: \n {ex.Message}");
+            }
+        }
+
+
+        [HttpDelete("{id:Guid}")]
+        [ProducesResponseType(StatusCodes.Status204NoContent)]
+        [ProducesResponseType(StatusCodes.Status400BadRequest)]
+        public IActionResult Delete([FromRoute] Guid id)
+        {
+            try
+            {
+                _saleService.Remove(id);
                 return NoContent();
             }
             catch (Exception ex)

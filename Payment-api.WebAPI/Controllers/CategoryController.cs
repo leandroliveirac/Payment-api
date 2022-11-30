@@ -60,15 +60,15 @@ namespace Payment_api.WebAPI.Controllers
             }
         }
 
-        [HttpPut]
+        [HttpPut("{id:Guid}")]
         [ProducesResponseType(StatusCodes.Status201Created)]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
-        public IActionResult Update([FromQuery] Guid id, [FromQuery] string newDescription)
+        public IActionResult Update([FromRoute] Guid id, [FromBody] CategoryInputModel entity)
         {
             try
             {
-                var category = _categoryService.Update(id, newDescription);
-                return CreatedAtRoute("getByDescription", new { description = newDescription }, category);
+                var category = _categoryService.Update(id, entity);
+                return CreatedAtRoute("getByDescription", new { description = entity.Description }, category);
             }
             catch (NullReferenceException ex)
             {
@@ -80,14 +80,14 @@ namespace Payment_api.WebAPI.Controllers
             }
         }
 
-        [HttpDelete]
+        [HttpDelete("{id:Guid}")]
         [ProducesResponseType(StatusCodes.Status204NoContent)]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
-        public IActionResult Remove([FromBody] CategoryInputModel entity)
+        public IActionResult Remove([FromRoute] Guid id)
         {
             try
             {
-                _categoryService.Remove(entity);
+                _categoryService.Remove(id);
                 return NoContent();
             }
             catch (NullReferenceException ex)

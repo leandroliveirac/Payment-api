@@ -57,7 +57,7 @@ namespace Payment_api.WebAPI.Controllers
             return Ok(products);
         }
 
-        [HttpPost]
+        [HttpPost()]
         [ProducesResponseType(StatusCodes.Status201Created)]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
         public async Task<IActionResult> CreateAsync(ProductInputModel entity)
@@ -77,14 +77,14 @@ namespace Payment_api.WebAPI.Controllers
             }
         }
 
-        [HttpPut]
+        [HttpPut("{id:Guid}")]
         [ProducesResponseType(StatusCodes.Status201Created)]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
-        public IActionResult Update([FromBody] ProductInputModel entity, Guid productId)
+        public IActionResult Update([FromBody] ProductInputModel entity, [FromRoute] Guid id)
         {
             try
             {
-                var product = _productService.Update(entity,productId);
+                var product = _productService.Update(entity,id);
                 return CreatedAtRoute("getProductById", new { id = product.Id }, product);
             }
             catch (NullReferenceException ex)
@@ -97,14 +97,14 @@ namespace Payment_api.WebAPI.Controllers
             }
         }
 
-        [HttpDelete]
+        [HttpDelete("{id:Guid}")]
         [ProducesResponseType(StatusCodes.Status204NoContent)]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
-        public IActionResult Remove([FromBody] ProductInputModel entity, Guid productId)
+        public IActionResult Remove([FromRoute] Guid id)
         {
             try
             {
-                _productService.Remove(entity,productId);
+                _productService.Remove(id);
                 return NoContent();
             }
             catch (NullReferenceException ex)

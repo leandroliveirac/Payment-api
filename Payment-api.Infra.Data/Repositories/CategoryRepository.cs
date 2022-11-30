@@ -14,7 +14,8 @@ namespace Payment_api.Infra.Data.Repositories
 
         public async Task<CategoryEntity> GetByDescriptionAsync(string description)
         {
-           return await _context.Categories.FirstOrDefaultAsync(c => c.Description.ToLower() == description.ToLower());
+           return await _context.Categories.AsNoTracking()
+                                        .FirstOrDefaultAsync(c => c.Description.ToLower() == description.ToLower());
         }
     }
 }

@@ -2,6 +2,7 @@
 using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using Payment_api.Infra.Data.Context;
 
@@ -10,9 +11,10 @@ using Payment_api.Infra.Data.Context;
 namespace Payment_api.Infra.Data.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    partial class ApplicationDbContextModelSnapshot : ModelSnapshot
+    [Migration("20221130173922_Alter FK orderId in Sale table")]
+    partial class AlterFKorderIdinSaletable
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder.HasAnnotation("ProductVersion", "6.0.11");
@@ -49,9 +51,8 @@ namespace Payment_api.Infra.Data.Migrations
                         .HasColumnType("TEXT")
                         .HasColumnName("DATE");
 
-                    b.Property<string>("Status")
-                        .IsRequired()
-                        .HasColumnType("TEXT")
+                    b.Property<int>("Status")
+                        .HasColumnType("INTEGER")
                         .HasColumnName("STATUS");
 
                     b.HasKey("Id");
@@ -169,9 +170,8 @@ namespace Payment_api.Infra.Data.Migrations
                         .HasColumnType("TEXT")
                         .HasColumnName("ID_SELLER");
 
-                    b.Property<string>("Status")
-                        .IsRequired()
-                        .HasColumnType("TEXT")
+                    b.Property<int>("Status")
+                        .HasColumnType("INTEGER")
                         .HasColumnName("STATUS");
 
                     b.HasKey("Id");

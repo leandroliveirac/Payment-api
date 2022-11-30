@@ -51,7 +51,7 @@ namespace Payment_api.Application.Services
             return _mapper.Map<IEnumerable<ProductViewModel>>(product);
         }
 
-        public void Remove(ProductInputModel entity, Guid productId)
+        public void Remove(Guid productId)
         {
             try
             {

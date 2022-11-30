@@ -4,14 +4,20 @@ using Payment_api.Domain.Validation;
 
 namespace Payment_api.Domain.Entities
 {
-    public class PhoneEntity : BaseEntity
+    public sealed class PhoneEntity : BaseEntity
     {      
 
-        public string Ddd { get; private set; }
-        public string Number { get; private set; }
+        public string Ddd { get; private set; } = string.Empty;
+        public string Number { get; private set; } = string.Empty;
         public PhoneType Type { get; private set; }
         public Guid SellerId { get; private set; }
-        public virtual SellerEntity? SellerEntity { get; set; }
+
+        /* EF Relation*/
+        public SellerEntity? SellerEntity { get; set; }
+
+        public PhoneEntity()
+        {            
+        }
 
         public PhoneEntity(string ddd, string number, PhoneType type, Guid sellerId)
         {

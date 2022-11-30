@@ -22,8 +22,14 @@ namespace Payment_api.Domain.Entities
             switch (Status)
             {
                 case OrderStatus.PROCESSING:
-                    DomainExceptionValidation.When(status != OrderStatus.PROCESSING && status != OrderStatus.SENT && status != OrderStatus.CANCELED, "Invalid transaction, valid sequence SENT or CANCELED");
+                    DomainExceptionValidation.When(status != OrderStatus.PROCESSING && status != OrderStatus.AWAITING_PAYMENT && status != OrderStatus.CANCELED, "Invalid transaction, valid sequence AWAITING PAYMENT or CANCELED");
                     break;
+                case OrderStatus.AWAITING_PAYMENT:
+                    DomainExceptionValidation.When(status != OrderStatus.AWAITING_PAYMENT && status != OrderStatus.PAYMENT_ACCEPT && status != OrderStatus.CANCELED,"Invalid transaction, valid sequence PAYMENT_ACCEPT or CANCELED");
+                    break;
+                case OrderStatus.PAYMENT_ACCEPT:
+                    DomainExceptionValidation.When(status != OrderStatus.PAYMENT_ACCEPT && status != OrderStatus.SENT && status != OrderStatus.CANCELED,"Invalid transaction, valid sequence SENT or CANCELED");
+                    break;                 
                 case OrderStatus.SENT:
                     DomainExceptionValidation.When(status != OrderStatus.SENT && status != OrderStatus.DELIVERED && status != OrderStatus.CANCELED, "Invalid transaction, valid sequence DELIVERED or CANCELED");
                     break;

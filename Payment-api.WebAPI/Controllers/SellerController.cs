@@ -48,10 +48,10 @@ namespace Payment_api.WebAPI.Controllers
         }
 
 
-        [HttpPut]
+        [HttpPut("{id:Guid}")]
         [ProducesResponseType(StatusCodes.Status201Created)]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
-        public ActionResult<SellerViewModel> Update([FromBody] SellerInputModel entity, Guid id)
+        public ActionResult<SellerViewModel> Update([FromRoute] Guid id, [FromBody] SellerInputModel entity)
         {
             try
             {
@@ -64,10 +64,10 @@ namespace Payment_api.WebAPI.Controllers
             }
         }
 
-        [HttpDelete]
+        [HttpDelete("{id:Guid}")]
         [ProducesResponseType(StatusCodes.Status204NoContent)]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
-        public IActionResult Delete(Guid id)
+        public IActionResult Delete([FromRoute] Guid id)
         {
             try
             {

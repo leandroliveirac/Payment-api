@@ -19,12 +19,12 @@ namespace Payment_api.Infra.Data.Repositories
 
         public async Task<IEnumerable<ProductEntity>> GetByDescriptionAsync(string description)
         {
-            return await _context.Products.Include(p => p.Category)
+            return await _context.Products.Include(p => p.Category).AsNoTracking()
                                         .Where(p => p.Description.ToLower().Contains(description.ToLower().Trim())).ToListAsync();
         }
         public override async Task<ProductEntity> GetByIdAsync(Guid id)
         {
-            return await _context.Products.Include(p => p.Category).FirstOrDefaultAsync(p => p.Id == id);
+            return await _context.Products.Include(p => p.Category).AsNoTracking().FirstOrDefaultAsync(p => p.Id == id);
         }
 
     }

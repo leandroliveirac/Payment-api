@@ -6,7 +6,9 @@ namespace Payment_api.Domain.Enums
         SENT,
         DELIVERED,
         CANCELED,
-        RETURNED
+        RETURNED,
+        AWAITING_PAYMENT,        
+        PAYMENT_ACCEPT,
 
     }
 }

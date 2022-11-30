@@ -3,13 +3,17 @@ using Payment_api.Domain.Validation;
 
 namespace Payment_api.Domain.Entities
 {
-    public class SellerEntity : BaseEntity
+    public sealed class SellerEntity : BaseEntity
     {
-        public string Name { get; private set; }
-        public string Email { get; private set; }
-        public virtual IEnumerable<PhoneEntity>? Phones { get; set; }
+        public string Name { get; private set; } = string.Empty;
+        public string Email { get; private set; } = string.Empty;
 
-        
+        /*EF Relation*/
+        public IEnumerable<PhoneEntity>? Phones { get; set; }
+
+        private SellerEntity()
+        {            
+        }
 
         public SellerEntity(string name, string email)
         {
@@ -18,12 +22,12 @@ namespace Payment_api.Domain.Entities
             Email = email;
         }
 
-        private SellerEntity(string name, string email, IEnumerable<PhoneEntity>? phones)
-        {
-            Name = name;
-            Email = email;
-            Phones = phones;
-        }
+        // private SellerEntity(string name, string email, IEnumerable<PhoneEntity>? phones)
+        // {
+        //     Name = name;
+        //     Email = email;
+        //     Phones = phones;
+        // }
 
         public void Update(string name, string email)
         {

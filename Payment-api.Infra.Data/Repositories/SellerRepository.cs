@@ -13,7 +13,8 @@ namespace Payment_api.Infra.Data.Repositories
 
         public override async Task<SellerEntity> GetByIdAsync(Guid id)
         {
-            return await _context.Sellers.Include(x => x.Phones).FirstOrDefaultAsync(x => x.Id == id);
+            return await _context.Sellers.Include(x => x.Phones).AsNoTracking()
+                                                                .FirstOrDefaultAsync(x => x.Id == id);
         }
     }
 }

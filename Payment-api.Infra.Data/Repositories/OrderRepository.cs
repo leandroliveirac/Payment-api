@@ -16,6 +16,7 @@ namespace Payment_api.Infra.Data.Repositories
             return await _context.Orders.Include(x => x.Items)
                                             .ThenInclude(i => i.Product)
                                                 .ThenInclude(p => p.Category)
+                                        .AsNoTracking()
                                         .ToListAsync();
         }
 
@@ -24,6 +25,7 @@ namespace Payment_api.Infra.Data.Repositories
             return await _context.Orders.Include(x => x.Items)
                                         .ThenInclude(i => i.Product)
                                                 .ThenInclude(p => p.Category)
+                                        .AsNoTracking()
                                         .FirstOrDefaultAsync(x => x.Id == id);
         }
 

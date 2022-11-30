@@ -5,8 +5,7 @@ namespace Payment_api.Application.InputModels
 {
     public record SaleInputModel
     {
-        public SaleStatus Status { get; set; }
-        public SellerViewModel Seller { get; set; }
-        public OrderViewModel Order { get; set; }
+        public Guid SellerId { get; set; }
+        public Guid OrderId { get; set; }
     }
 }

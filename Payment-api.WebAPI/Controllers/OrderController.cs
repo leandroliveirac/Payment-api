@@ -31,12 +31,12 @@ namespace Payment_api.WebAPI.Controllers
         }
 
         [HttpGet]
-        [Route("{orderId}", Name = "getOrderById")]
+        [Route("{id:Guid}", Name = "getOrderById")]
         [ProducesResponseType(StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status404NotFound)]
-        public async Task<ActionResult<OrderViewModel>> GetByIdAsync([FromRoute] Guid orderId)
+        public async Task<ActionResult<OrderViewModel>> GetByIdAsync([FromRoute] Guid id)
         {
-            var order = await _orderService.GetByIdAsync(orderId);
+            var order = await _orderService.GetByIdAsync(id);
 
             if(order == null)
                 return NotFound();
@@ -51,8 +51,8 @@ namespace Payment_api.WebAPI.Controllers
         {
             try
             {
-                await _orderService.CreateAsync(entity);
-                return Ok();
+                var order = await _orderService.CreateAsync(entity);
+                return CreatedAtRoute("getOrderById", new {id = order.Id}, order);
             }
             catch (Exception ex)
             {                
@@ -60,7 +60,7 @@ namespace Payment_api.WebAPI.Controllers
             }
         }
 
-        [HttpPut("canceled")]
+        [HttpPut("canceled/{id:Guid}")]
         [ProducesResponseType(StatusCodes.Status204NoContent)]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
         public IActionResult Canceled(Guid id)
