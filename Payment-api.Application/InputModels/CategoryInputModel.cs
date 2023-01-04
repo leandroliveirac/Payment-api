@@ -1,6 +1,6 @@
 namespace Payment_api.Application.InputModels
 {
-    public record CategoryInputModel
+    public class CategoryInputModel
     {
         public string Description { get; set; }
     }

@@ -4,6 +4,7 @@ using Payment_api.Application.Interfaces.Services;
 using Payment_api.Application.ViewModels;
 using Payment_api.Domain.Entities;
 using Payment_api.Domain.Interfaces.Repositories;
+using Payment_api.Domain.Validation;
 
 namespace Payment_api.Application.Services
 {
@@ -37,8 +38,11 @@ namespace Payment_api.Application.Services
         }
 
         public async Task<CategoryViewModel> CreateAsync(CategoryInputModel entity)
-        {
-            var category = _mapper.Map<CategoryEntity>(entity);
+        {            
+            DomainExceptionValidation.When(_categoryRepository.GetByDescriptionAsync(entity.Description) != null, "There is category with this description!");
+            
+            var category = _mapper.Map<CategoryEntity>(entity);                     
+
             await _categoryRepository.CreateAsync(category);
 
             return _mapper.Map<CategoryViewModel>(category);

@@ -2,7 +2,7 @@ using Payment_api.Domain.Enums;
 
 namespace Payment_api.Application.ViewModels
 {
-    public record SaleViewModel
+    public class SaleViewModel
     {
         public Guid Id { get; set; }
         public DateTime Moment { get; set; }

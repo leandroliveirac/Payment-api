@@ -4,9 +4,10 @@ using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Payment_api.Application.Interfaces.Services;
 using Payment_api.Application.Mappers;
-using Payment_api.Application.Mappings;
 using Payment_api.Application.Services;
 using Payment_api.Domain.Interfaces.Repositories;
+using Payment_api.Domain.Services;
+using Payment_api.Domain.Services.Interfaces;
 using Payment_api.Infra.Data.Context;
 using Payment_api.Infra.Data.Repositories;
 
@@ -38,10 +39,11 @@ namespace Payment_api.Infra.IOC
             services.AddScoped<IProductService,ProductService>();
             services.AddScoped<IOrderService,OrderService>();
             services.AddScoped<ISaleService,SaleService>();
+            services.AddScoped<ISellerAppService,SellerAppService>();
+
             services.AddScoped<ISellerService,SellerService>();
             #endregion
-
-            services.AddAutoMapper(typeof(DomainToDTOMappingProfile));
+        
             services.AddAutoMapper(typeof(MapperConfigProfile));
 
             return services;

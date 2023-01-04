@@ -1,6 +1,6 @@
 namespace Payment_api.Application.ViewModels
 {
-    public record ProductViewModel
+    public class ProductViewModel
     {
         public Guid Id { get; set; }
         public string Description { get; set; }

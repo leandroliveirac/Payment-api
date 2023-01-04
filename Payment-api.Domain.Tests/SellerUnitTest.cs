@@ -11,7 +11,7 @@ namespace Payment_api.Domain.Tests
         public void InsertSeller_WthValidParameters_ResultNotThrowException()
         {
  
-            Action action = () => new SellerEntity("Joao", "joao@test.com");
+            Action action = () => new SellerEntity("Joao", "joao@test.com","11111111111");
 
             action.Should()
                     .NotThrow<DomainExceptionValidation>();

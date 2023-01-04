@@ -10,7 +10,6 @@ namespace Payment_api.Domain.Entities
             get => _id; 
             protected set
             {                
-                DomainExceptionValidation.When(value.Equals(Guid.Empty), "Invalid id value");
                 _id = value;              
             }
         }

@@ -3,7 +3,7 @@ using Payment_api.Application.ViewModels;
 
 namespace Payment_api.Application.Interfaces.Services
 {
-    public interface ISellerService
+    public interface ISellerAppService
     {
         Task<IEnumerable<SellerViewModel>> GetAllAsync();
         Task<SellerViewModel> GetByIdAsync(Guid id);

@@ -1,6 +1,6 @@
 namespace Payment_api.Application.InputModels
 {
-    public record ProductInputModel
+    public class ProductInputModel
     {
         public string Description { get; set; }
         public decimal Price { get; set; }

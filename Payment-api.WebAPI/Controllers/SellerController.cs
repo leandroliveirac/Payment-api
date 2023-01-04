@@ -10,15 +10,23 @@ namespace Payment_api.WebAPI.Controllers
     [Produces("application/json")]
     public class SellerController : ControllerBase
     {
-        private readonly ISellerService _sellerService;
+        private readonly ISellerAppService _sellerService;
 
-        public SellerController(ISellerService sellerService)
+        public SellerController(ISellerAppService sellerService)
         {
             _sellerService = sellerService;
         }
 
         [HttpGet]
-        [Route("{id}", Name = "getSellerById")]
+        [ProducesResponseType(StatusCodes.Status200OK)]
+        public async Task<ActionResult<IEnumerable<SellerViewModel>>>GetAll()
+        {
+            var seller = await _sellerService.GetAllAsync();           
+            return Ok(seller);
+        }
+
+        [HttpGet]
+        [Route("{id:Guid}", Name = "getSellerById")]
         [ProducesResponseType(StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status404NotFound)]
         public async Task<ActionResult<SellerViewModel>> GetByIdAsync([FromRoute] Guid id)
@@ -46,7 +54,6 @@ namespace Payment_api.WebAPI.Controllers
                 return BadRequest($"An error occurred while trying to execute your request: \n {ex.InnerException?.Message ?? ex.Message}");
             }
         }
-
 
         [HttpPut("{id:Guid}")]
         [ProducesResponseType(StatusCodes.Status201Created)]

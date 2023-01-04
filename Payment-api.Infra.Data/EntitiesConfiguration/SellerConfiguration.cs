@@ -14,6 +14,9 @@ namespace Payment_api.Infra.Data.EntitiesConfiguration
             builder.Property(e => e.Id).HasColumnName("ID_SELLER");
             builder.Property(e => e.Name).HasColumnName("NAME").HasMaxLength(400).IsRequired();
             builder.Property(e => e.Email).HasColumnName("DS_EMAIL").HasMaxLength(400).IsRequired();
+            builder.Property(e => e.Cpf).HasColumnName("NR_CPF").HasMaxLength(20).IsRequired();
+            builder.HasIndex(e => e.Cpf)
+                    .IsUnique();
 
             builder.HasMany(x => x.Phones)
                 .WithOne(s => s.SellerEntity);

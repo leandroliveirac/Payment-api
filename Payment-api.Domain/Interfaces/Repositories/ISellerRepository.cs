@@ -4,5 +4,7 @@ namespace Payment_api.Domain.Interfaces.Repositories
 {
     public interface ISellerRepository : IBaseRepository<SellerEntity>
     {
+        Task<SellerEntity> GetByCpf(string cpf);
+        Task<bool> ThereIsEmail(string email, Guid idSeller);
     }
 }

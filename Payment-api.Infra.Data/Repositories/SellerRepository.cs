@@ -11,6 +11,25 @@ namespace Payment_api.Infra.Data.Repositories
         {
         }
 
+        public async Task<bool> ThereIsEmail(string email, Guid idSeller)
+        {
+            return await _context.Sellers.AsNoTracking()
+                                        .AnyAsync(s => s.Email == email && s.Id != idSeller);
+        }
+
+        public async Task<SellerEntity> GetByCpf(string cpf)
+        {
+            return await _context.Sellers.AsNoTracking()
+                                    .FirstOrDefaultAsync(s => s.Cpf == cpf);
+        }
+
+        public override async Task<IEnumerable<SellerEntity>> GetAllAsync()
+        {
+            return await _context.Sellers.AsNoTracking()
+                                        .Include(s => s.Phones)
+                                        .ToListAsync();
+        }
+
         public override async Task<SellerEntity> GetByIdAsync(Guid id)
         {
             return await _context.Sellers.Include(x => x.Phones).AsNoTracking()
