@@ -8,11 +8,7 @@ namespace Payment_api.Domain.Entities
         public Guid ProductId { get; private set; }
         public Guid OrderId { get; private set; }
         public virtual ProductEntity? Product { get; set; }
-        public virtual OrderEntity? Order { get; set; }
-
-        private OrderItemEntity()
-        {            
-        }
+        public virtual OrderEntity? Order { get; set; }      
 
         public OrderItemEntity(int quantity, Guid productId, Guid orderId)
         {
@@ -20,7 +16,8 @@ namespace Payment_api.Domain.Entities
             Quantity = quantity;
             ProductId = productId;
             OrderId = orderId;
-        }
+        }                 
+
         public void Update(int quantity)
         {
             Validate(quantity);

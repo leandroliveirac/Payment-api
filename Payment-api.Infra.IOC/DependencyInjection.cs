@@ -17,9 +17,6 @@ namespace Payment_api.Infra.IOC
     {
         public static IServiceCollection AddInfrastructure(this IServiceCollection services, IConfiguration configuration)
         {
-            var cnn = new SqliteConnection("Filename=:memory:");
-            cnn.Open();
-
             services.AddDbContext<ApplicationDbContext>(options =>
                 options.UseSqlite("Data Source=DbTeste.db",
                 m => m.MigrationsAssembly(typeof(ApplicationDbContext).Assembly.FullName)));
@@ -37,11 +34,14 @@ namespace Payment_api.Infra.IOC
             #region Services
             services.AddScoped<ICategoryService,CategoryService>();
             services.AddScoped<IProductService,ProductService>();
-            services.AddScoped<IOrderService,OrderService>();
-            services.AddScoped<ISaleService,SaleService>();
-            services.AddScoped<ISellerAppService,SellerAppService>();
-
             services.AddScoped<ISellerService,SellerService>();
+            services.AddScoped<ISaleService,SaleService>();
+            services.AddScoped<IOrderService, OrderService>();
+
+            services.AddScoped<ISellerAppService,SellerAppService>();
+            services.AddScoped<IOrderAppService,OrderAppService>();
+
+            
             #endregion
         
             services.AddAutoMapper(typeof(MapperConfigProfile));

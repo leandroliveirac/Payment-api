@@ -13,21 +13,20 @@ namespace Payment_api.Infra.Data.Repositories
 
         public override async Task<IEnumerable<OrderEntity>> GetAllAsync()
         {
-            return await _context.Orders.Include(x => x.Items)
+            return await _context.Orders.AsNoTracking()
+                                        .Include(x => x.Items)
                                             .ThenInclude(i => i.Product)
-                                                .ThenInclude(p => p.Category)
-                                        .AsNoTracking()
-                                        .ToListAsync();
+                                                .ThenInclude(p => p.Category)                                        
+                                                .ToListAsync();
         }
 
         public override async Task<OrderEntity> GetByIdAsync(Guid id)
         {
-            return await _context.Orders.Include(x => x.Items)
-                                        .ThenInclude(i => i.Product)
-                                                .ThenInclude(p => p.Category)
-                                        .AsNoTracking()
-                                        .FirstOrDefaultAsync(x => x.Id == id);
-        }
-
+            return await _context.Orders.AsNoTracking()
+                                        .Include(x => x.Items)
+                                            .ThenInclude(i => i.Product)
+                                                .ThenInclude(p => p.Category)                                        
+                                                .FirstOrDefaultAsync(x => x.Id == id);
+        }        
     }
 }

@@ -10,9 +10,9 @@ namespace Payment_api.WebAPI.Controllers
     [Produces("application/json")]
     public class OrderController : ControllerBase
     {
-        private readonly IOrderService _orderService;
+        private readonly IOrderAppService _orderService;
 
-        public OrderController(IOrderService orderService)
+        public OrderController(IOrderAppService orderService)
         {
             _orderService = orderService;
         }

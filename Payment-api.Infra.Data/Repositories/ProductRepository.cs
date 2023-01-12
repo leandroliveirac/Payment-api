@@ -27,5 +27,13 @@ namespace Payment_api.Infra.Data.Repositories
             return await _context.Products.Include(p => p.Category).AsNoTracking().FirstOrDefaultAsync(p => p.Id == id);
         }
 
+        public async Task<IEnumerable<ProductEntity>> GetByIdsAsync(IEnumerable<Guid> ids)
+        {
+            return await _context.Products.AsNoTracking()
+                                            .Include(p => p.Category)
+                                            .Where(p => ids.Contains(p.Id))
+                                            .ToListAsync();
+        }
+
     }
 }
