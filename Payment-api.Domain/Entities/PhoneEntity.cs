@@ -12,8 +12,8 @@ namespace Payment_api.Domain.Entities
         public PhoneType Type { get; private set; }
         public Guid SellerId { get; private set; }
 
-        /* EF Relation*/
-        public SellerEntity? SellerEntity { get; }
+        /* Navigation property EF */
+        public SellerEntity SellerEntity { get; }
 
         private PhoneEntity()
         {            

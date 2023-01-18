@@ -27,6 +27,12 @@ namespace Payment_api.Infra.Data.Repositories
                                             .ThenInclude(i => i.Product)
                                                 .ThenInclude(p => p.Category)                                        
                                                 .FirstOrDefaultAsync(x => x.Id == id);
-        }        
+        }
+
+        public override void Update(OrderEntity entity)
+        {
+            _context.Entry(entity).State = EntityState.Modified;
+            _context.SaveChanges();
+        }
     }
 }

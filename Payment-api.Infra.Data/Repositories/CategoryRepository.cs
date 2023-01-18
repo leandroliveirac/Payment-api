@@ -2,7 +2,6 @@ using Microsoft.EntityFrameworkCore;
 using Payment_api.Domain.Entities;
 using Payment_api.Domain.Interfaces.Repositories;
 using Payment_api.Infra.Data.Context;
-using SQLitePCL;
 
 namespace Payment_api.Infra.Data.Repositories
 {
@@ -15,7 +14,7 @@ namespace Payment_api.Infra.Data.Repositories
         public async Task<CategoryEntity> GetByDescriptionAsync(string description)
         {
            return await _context.Categories.AsNoTracking()
-                                        .FirstOrDefaultAsync(c => c.Description.ToLower() == description.ToLower());
+                                        .FirstOrDefaultAsync(c => description.ToLower().Contains(c.Description.ToLower()));
         }
     }
 }

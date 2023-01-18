@@ -20,6 +20,9 @@ namespace Payment_api.Infra.Data.EntitiesConfiguration
             builder.Property(p => p.Price).HasColumnName("PRICE")
                                                 .HasPrecision(10,2)
                                                 .IsRequired();
+            
+            builder.Property(p => p.Active).HasColumnName("ACTIVE")
+                                            .IsRequired();
 
             
             builder.HasOne(p => p.Category)

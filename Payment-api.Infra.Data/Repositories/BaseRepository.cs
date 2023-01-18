@@ -44,6 +44,7 @@ namespace Payment_api.Infra.Data.Repositories
         public virtual void Update(Entity entity)
         {
             _context.Set<Entity>().Update(entity);
+
             _context.SaveChanges();
         }
     }

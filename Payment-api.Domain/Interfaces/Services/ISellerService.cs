@@ -1,6 +1,6 @@
 using Payment_api.Domain.Entities;
 
-namespace Payment_api.Domain.Services.Interfaces
+namespace Payment_api.Domain.Interfaces.Services
 {
     public interface ISellerService
     {

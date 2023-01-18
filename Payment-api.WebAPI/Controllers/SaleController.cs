@@ -10,9 +10,9 @@ namespace Payment_api.WebAPI.Controllers
     [Produces("application/json")]
     public class SaleController : ControllerBase
     {
-        private readonly ISaleService _saleService;
+        private readonly ISaleAppService _saleService;
 
-        public SaleController(ISaleService saleService)
+        public SaleController(ISaleAppService saleService)
         {
             _saleService = saleService;
         }
@@ -23,12 +23,12 @@ namespace Payment_api.WebAPI.Controllers
         [ProducesResponseType(StatusCodes.Status404NotFound)]
         public async Task<ActionResult<SaleViewModel>> GetByIdAsync([FromRoute] Guid id)
         {
-            var seller = await _saleService.GetByIdAsync(id);
+            var sale = await _saleService.GetByIdAsync(id);
 
-            if(seller == null)
+            if(sale == null)
                 return NotFound();
 
-            return Ok(seller);
+            return Ok(sale);
         }
 
         [HttpPost]        
@@ -44,7 +44,7 @@ namespace Payment_api.WebAPI.Controllers
             }
             catch (Exception ex)
             {                
-                return BadRequest($"An error occurred while trying to execute your request: \n {ex.Message}");
+                return BadRequest($"{ex.Message}");
             }
         }
 
@@ -60,7 +60,7 @@ namespace Payment_api.WebAPI.Controllers
             }
             catch (Exception ex)
             {                
-                return BadRequest($"An error occurred while trying to execute your request: \n {ex.Message}");
+                return BadRequest($"{ex.Message}");
             }
         }
 
@@ -76,7 +76,7 @@ namespace Payment_api.WebAPI.Controllers
             }
             catch (Exception ex)
             {                
-                return BadRequest($"An error occurred while trying to execute your request: \n {ex.Message}");
+                return BadRequest($"{ex.Message}");
             }
         }
 
@@ -92,7 +92,7 @@ namespace Payment_api.WebAPI.Controllers
             }
             catch (Exception ex)
             {                
-                return BadRequest($"An error occurred while trying to execute your request: \n {ex.Message}");
+                return BadRequest($"{ex.Message}");
             }
         }
 
@@ -108,25 +108,9 @@ namespace Payment_api.WebAPI.Controllers
             }
             catch (Exception ex)
             {                
-                return BadRequest($"An error occurred while trying to execute your request: \n {ex.Message}");
+                return BadRequest($"{ex.Message}");
             }
         }
 
-
-        [HttpDelete("{id:Guid}")]
-        [ProducesResponseType(StatusCodes.Status204NoContent)]
-        [ProducesResponseType(StatusCodes.Status400BadRequest)]
-        public IActionResult Delete([FromRoute] Guid id)
-        {
-            try
-            {
-                _saleService.Remove(id);
-                return NoContent();
-            }
-            catch (Exception ex)
-            {                
-                return BadRequest($"An error occurred while trying to execute your request: \n {ex.Message}");
-            }
-        }
     }
 }

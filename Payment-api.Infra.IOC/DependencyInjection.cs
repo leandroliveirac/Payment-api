@@ -1,4 +1,3 @@
-using Microsoft.Data.Sqlite;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
@@ -6,8 +5,8 @@ using Payment_api.Application.Interfaces.Services;
 using Payment_api.Application.Mappers;
 using Payment_api.Application.Services;
 using Payment_api.Domain.Interfaces.Repositories;
+using Payment_api.Domain.Interfaces.Services;
 using Payment_api.Domain.Services;
-using Payment_api.Domain.Services.Interfaces;
 using Payment_api.Infra.Data.Context;
 using Payment_api.Infra.Data.Repositories;
 
@@ -18,8 +17,8 @@ namespace Payment_api.Infra.IOC
         public static IServiceCollection AddInfrastructure(this IServiceCollection services, IConfiguration configuration)
         {
             services.AddDbContext<ApplicationDbContext>(options =>
-                options.UseSqlite("Data Source=DbTeste.db",
-                m => m.MigrationsAssembly(typeof(ApplicationDbContext).Assembly.FullName)));
+                options.UseSqlite(configuration.GetConnectionString("SQlite"),
+                m => m.MigrationsAssembly(typeof(ApplicationDbContext).Assembly.FullName)));                
 
             #region Repositories
             services.AddScoped<ICategoryRepository,CategoryRepository>();
@@ -31,17 +30,16 @@ namespace Payment_api.Infra.IOC
             services.AddScoped<ISellerRepository,SellerRepository>();            
             #endregion
 
-            #region Services
-            services.AddScoped<ICategoryService,CategoryService>();
-            services.AddScoped<IProductService,ProductService>();
+            #region Services            
             services.AddScoped<ISellerService,SellerService>();
             services.AddScoped<ISaleService,SaleService>();
             services.AddScoped<IOrderService, OrderService>();
 
+            services.AddScoped<ICategoryAppService,CategoryAppService>();
+            services.AddScoped<IProductAppService,ProductAppService>();
             services.AddScoped<ISellerAppService,SellerAppService>();
             services.AddScoped<IOrderAppService,OrderAppService>();
-
-            
+            services.AddScoped<ISaleAppService,SaleAppService>();            
             #endregion
         
             services.AddAutoMapper(typeof(MapperConfigProfile));

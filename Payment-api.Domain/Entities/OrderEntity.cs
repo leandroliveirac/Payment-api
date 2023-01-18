@@ -3,13 +3,14 @@ using Payment_api.Domain.Validation;
 
 namespace Payment_api.Domain.Entities
 {
-    public class OrderEntity : BaseEntity
+    public sealed class OrderEntity : BaseEntity
     {
        
         public DateTime Date { get; private set; }
         public OrderStatus Status { get; private set; }
 
-        public IEnumerable<OrderItemEntity>? Items { get; set; }
+        /* Navigation property EF */
+        public IEnumerable<OrderItemEntity> Items { get; set; }
 
         public OrderEntity()
         {

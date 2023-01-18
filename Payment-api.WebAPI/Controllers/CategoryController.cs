@@ -10,11 +10,11 @@ namespace Payment_api.WebAPI.Controllers
     [Produces("application/json")]
     public class CategoryController : ControllerBase
     {
-        private readonly ICategoryService _categoryService;
+        private readonly ICategoryAppService _categoryAppService;
 
-        public CategoryController(ICategoryService categoryService)
+        public CategoryController(ICategoryAppService categoryAppService)
         {
-            _categoryService = categoryService;
+            _categoryAppService = categoryAppService;
         }
 
         [HttpGet]
@@ -22,7 +22,7 @@ namespace Payment_api.WebAPI.Controllers
         [ProducesResponseType(StatusCodes.Status404NotFound)]
         public async Task<ActionResult<IEnumerable<CategoryViewModel>>> GetAllAsync()
         {
-            var categories = await _categoryService.GetAllAsync();
+            var categories = await _categoryAppService.GetAllAsync();
 
             if (categories == null)
                 return NotFound();
@@ -36,7 +36,7 @@ namespace Payment_api.WebAPI.Controllers
         [ProducesResponseType(StatusCodes.Status404NotFound)]
         public async Task<ActionResult<CategoryViewModel>> GetByDescriptionAsync([FromRoute] string description)
         {
-            var category = await _categoryService.GetByDescriptionAsync(description);
+            var category = await _categoryAppService.GetByDescriptionAsync(description);
 
             if (category == null)
                 return NotFound();
@@ -51,7 +51,7 @@ namespace Payment_api.WebAPI.Controllers
         {
             try
             {
-                var category = await _categoryService.CreateAsync(entity);
+                var category = await _categoryAppService.CreateAsync(entity);
                 return CreatedAtRoute("getByDescription", new {description = category.Description },category);
             }
             catch (Exception ex)
@@ -67,32 +67,8 @@ namespace Payment_api.WebAPI.Controllers
         {
             try
             {
-                var category = _categoryService.Update(id, entity);
+                var category = _categoryAppService.Update(id, entity);
                 return CreatedAtRoute("getByDescription", new { description = entity.Description }, category);
-            }
-            catch (NullReferenceException ex)
-            {
-                return BadRequest(new { Error = ex.InnerException?.Message ?? ex.Message });
-            }
-            catch (Exception ex)
-            {
-                return BadRequest(new { Error = ex.InnerException?.Message ?? ex.Message });
-            }
-        }
-
-        [HttpDelete("{id:Guid}")]
-        [ProducesResponseType(StatusCodes.Status204NoContent)]
-        [ProducesResponseType(StatusCodes.Status400BadRequest)]
-        public IActionResult Remove([FromRoute] Guid id)
-        {
-            try
-            {
-                _categoryService.Remove(id);
-                return NoContent();
-            }
-            catch (NullReferenceException ex)
-            {
-                return BadRequest(new { Error = ex.InnerException?.Message ?? ex.Message });
             }
             catch (Exception ex)
             {

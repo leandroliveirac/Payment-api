@@ -14,14 +14,20 @@ namespace Payment_api.Infra.Data.Repositories
         public override Task<SaleEntity> GetByIdAsync(Guid id)
         {
             return _context.Sales
+                            .AsNoTracking()
                             .Include(x => x.Order)
                                 .ThenInclude(o => o.Items)
                                     .ThenInclude(x => x.Product)
                                         .ThenInclude(x => x.Category)
                             .Include(x => x.Seller)
-                                .ThenInclude(s => s.Phones)
-                            .AsNoTracking()
+                                .ThenInclude(s => s.Phones)                            
                             .FirstOrDefaultAsync(x => x.Id == id);
+        }
+
+        public async Task<SaleEntity>GetByOrder(Guid OrderId)
+        {
+            return await _context.Sales.AsNoTracking()
+                                .FirstOrDefaultAsync(x => x.OrderId == OrderId);
         }
     }
 }

@@ -9,11 +9,11 @@ namespace Payment_api.WebAPI.Controllers
     [Produces("application/json")]
     public class ProductController : ControllerBase
     {
-        private readonly IProductService _productService;
+        private readonly IProductAppService _productAppService;
 
-        public ProductController(IProductService productService)
+        public ProductController(IProductAppService productAppService)
         {
-            _productService = productService;
+            _productAppService = productAppService;
         }
 
         [HttpGet]
@@ -21,7 +21,7 @@ namespace Payment_api.WebAPI.Controllers
         [ProducesResponseType(StatusCodes.Status404NotFound)]
         public async Task<IActionResult> GetAllAsync()
         {
-            var products = await _productService.GetAllAsync();
+            var products = await _productAppService.GetAllAsync();
 
             if(products == null || products.Count() <= 0)
                 return NotFound();
@@ -35,7 +35,7 @@ namespace Payment_api.WebAPI.Controllers
         [ProducesResponseType(StatusCodes.Status404NotFound)]
         public async Task<IActionResult> GetByIdAsync([FromRoute] Guid id)        
         {
-            var product = await _productService.GetByIdAsync(id);
+            var product = await _productAppService.GetByIdAsync(id);
 
             if(product == null)
                 return NotFound();
@@ -49,7 +49,7 @@ namespace Payment_api.WebAPI.Controllers
         [ProducesResponseType(StatusCodes.Status404NotFound)]
         public async Task<IActionResult> GetByDescriptionAsync([FromRoute] string description)
         {
-            var products = await _productService.GetByDescriptionAsync(description);
+            var products = await _productAppService.GetByDescriptionAsync(description);
 
             if(products == null || products.Count()<= 0)
                 return NotFound();
@@ -64,7 +64,7 @@ namespace Payment_api.WebAPI.Controllers
         {
             try
             {
-                var product = await _productService.CreateAsync(entity);
+                var product = await _productAppService.CreateAsync(entity);
                 return CreatedAtRoute("getProductById", new { id = product.Id }, product);
             }
             catch (NullReferenceException ex)
@@ -76,36 +76,17 @@ namespace Payment_api.WebAPI.Controllers
                 return BadRequest(new { Error = ex.InnerException?.Message ?? ex.Message });
             }
         }
+        
 
-        [HttpPut("{id:Guid}")]
-        [ProducesResponseType(StatusCodes.Status201Created)]
+        [HttpPost("inactivate/{id:Guid}")]
+        [ProducesResponseType(StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
-        public IActionResult Update([FromBody] ProductInputModel entity, [FromRoute] Guid id)
+        public IActionResult Inactivate([FromRoute] Guid id)
         {
             try
             {
-                var product = _productService.Update(entity,id);
-                return CreatedAtRoute("getProductById", new { id = product.Id }, product);
-            }
-            catch (NullReferenceException ex)
-            {
-                return BadRequest(new { Error = ex.InnerException?.Message ?? ex.Message });
-            }
-            catch (Exception ex)
-            {
-                return BadRequest(new { Error = ex.InnerException?.Message ?? ex.Message });
-            }
-        }
-
-        [HttpDelete("{id:Guid}")]
-        [ProducesResponseType(StatusCodes.Status204NoContent)]
-        [ProducesResponseType(StatusCodes.Status400BadRequest)]
-        public IActionResult Remove([FromRoute] Guid id)
-        {
-            try
-            {
-                _productService.Remove(id);
-                return NoContent();
+                _productAppService.Inactivate(id);
+                return Ok();
             }
             catch (NullReferenceException ex)
             {

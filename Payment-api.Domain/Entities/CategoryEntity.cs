@@ -2,7 +2,7 @@ using Payment_api.Domain.Validation;
 
 namespace Payment_api.Domain.Entities
 {
-    public class CategoryEntity : BaseEntity
+    public sealed class CategoryEntity : BaseEntity
     {
         public string Description { get; private set; }
 

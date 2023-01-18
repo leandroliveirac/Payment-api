@@ -15,6 +15,8 @@ namespace Payment_api.Infra.Data.EntitiesConfiguration
             builder.Property(x => x.OrderId).HasColumnName("ID_ORDER").IsRequired();
             builder.Property(x => x.ProductId).HasColumnName("ID_PRODUCT").IsRequired();
             builder.Property(x => x.Quantity).HasColumnName("QUANTITY").IsRequired();
+            builder.Property(x => x.ProductDescription).HasColumnName("DS_PRODUCT").IsRequired();
+            builder.Property(x => x.ProductUnitPrice).HasColumnName("PRODUCT_UNIT_PRICE").IsRequired();
 
             builder.HasOne(x => x.Order)
                     .WithMany(o => o.Items)

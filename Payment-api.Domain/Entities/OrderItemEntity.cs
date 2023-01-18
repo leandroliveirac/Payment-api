@@ -2,25 +2,34 @@ using Payment_api.Domain.Validation;
 
 namespace Payment_api.Domain.Entities
 {
-    public class OrderItemEntity : BaseEntity
-    {
-        public int Quantity { get; private set; }
-        public Guid ProductId { get; private set; }
+    public sealed class OrderItemEntity : BaseEntity
+    {       
         public Guid OrderId { get; private set; }
-        public virtual ProductEntity? Product { get; set; }
-        public virtual OrderEntity? Order { get; set; }      
+        public Guid ProductId { get; private set; } 
+        public string ProductDescription { get; private set; }
+        public decimal ProductUnitPrice { get; private set; }
+        public int Quantity { get; private set; }
 
-        public OrderItemEntity(int quantity, Guid productId, Guid orderId)
+        /* Navigation property EF */
+        public ProductEntity Product { get; set; }
+        public OrderEntity Order { get; set; }
+        
+        public OrderItemEntity(Guid orderId, Guid productId, string productDescription, decimal productUnitPrice, int quantity)
         {
             Validate(quantity);
-            Quantity = quantity;
-            ProductId = productId;
             OrderId = orderId;
-        }                 
-
-        public void Update(int quantity)
+            ProductId = productId;
+            ProductDescription = productDescription;
+            ProductUnitPrice = productUnitPrice;
+            Quantity = quantity;
+        }
+        public void Update(Guid orderId, Guid productId, string productDescription, decimal productUnitPrice, int quantity)
         {
             Validate(quantity);
+            OrderId = orderId;
+            ProductId = productId;
+            ProductDescription = productDescription;
+            ProductUnitPrice = productUnitPrice;
             Quantity = quantity;
         }
 

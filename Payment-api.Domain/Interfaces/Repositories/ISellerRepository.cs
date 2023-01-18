@@ -6,5 +6,6 @@ namespace Payment_api.Domain.Interfaces.Repositories
     {
         Task<SellerEntity> GetByCpf(string cpf);
         Task<bool> ThereIsEmail(string email, Guid idSeller);
+        Task<bool>HasSeller(Guid id);
     }
 }

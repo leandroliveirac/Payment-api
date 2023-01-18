@@ -13,26 +13,34 @@ namespace Payment_api.Infra.Data.Repositories
         public override async Task<IEnumerable<ProductEntity>> GetAllAsync()
         {
             return await _context.Products
-                                .Include(x => x.Category)
-                                .ToListAsync();
+                                        .AsNoTracking()
+                                        .Include(x => x.Category)
+                                        .ToListAsync();
         }
 
         public async Task<IEnumerable<ProductEntity>> GetByDescriptionAsync(string description)
         {
-            return await _context.Products.Include(p => p.Category).AsNoTracking()
-                                        .Where(p => p.Description.ToLower().Contains(description.ToLower().Trim())).ToListAsync();
+            return await _context.Products
+                                        .AsNoTracking()
+                                        .Include(p => p.Category)
+                                        .Where(p => p.Description.ToLower().Contains(description.ToLower().Trim()))
+                                        .ToListAsync();
         }
         public override async Task<ProductEntity> GetByIdAsync(Guid id)
         {
-            return await _context.Products.Include(p => p.Category).AsNoTracking().FirstOrDefaultAsync(p => p.Id == id);
+            return await _context.Products
+                                        .AsNoTracking()
+                                        .Include(p => p.Category)
+                                        .FirstOrDefaultAsync(p => p.Id == id);
         }
 
         public async Task<IEnumerable<ProductEntity>> GetByIdsAsync(IEnumerable<Guid> ids)
         {
-            return await _context.Products.AsNoTracking()
-                                            .Include(p => p.Category)
-                                            .Where(p => ids.Contains(p.Id))
-                                            .ToListAsync();
+            return await _context.Products
+                                        .AsNoTracking()
+                                        .Include(p => p.Category)
+                                        .Where(p => ids.Contains(p.Id))
+                                        .ToListAsync();
         }
 
     }

@@ -74,6 +74,54 @@ namespace Payment_api.WebAPI.Controllers
             {                
                 return BadRequest($"An error occurred while trying to execute your request: \n {ex.Message}");
             }
-        }        
+        }
+
+        [HttpPut("returned/{id:Guid}")]
+        [ProducesResponseType(StatusCodes.Status204NoContent)]
+        [ProducesResponseType(StatusCodes.Status400BadRequest)]
+        public IActionResult Returned([FromRoute] Guid id)
+        {
+            try
+            {
+                _orderService.Returned(id);
+                return NoContent();
+            }
+            catch (Exception ex)
+            {                
+                return BadRequest($"{ex.Message}");
+            }
+        }
+
+        [HttpPut("sent/{id:Guid}")]
+        [ProducesResponseType(StatusCodes.Status204NoContent)]
+        [ProducesResponseType(StatusCodes.Status400BadRequest)]
+        public IActionResult Sent([FromRoute] Guid id)
+        {
+            try
+            {
+                _orderService.Sent(id);
+                return NoContent();
+            }
+            catch (Exception ex)
+            {                
+                return BadRequest($"{ex.Message}");
+            }
+        }
+
+        [HttpPut("delivered/{id:Guid}")]
+        [ProducesResponseType(StatusCodes.Status204NoContent)]
+        [ProducesResponseType(StatusCodes.Status400BadRequest)]
+        public IActionResult Delivered([FromRoute] Guid id)
+        {
+            try
+            {
+                _orderService.Delivered(id);
+                return NoContent();
+            }
+            catch (Exception ex)
+            {                
+                return BadRequest($"{ex.Message}");
+            }
+        }      
     }
 }

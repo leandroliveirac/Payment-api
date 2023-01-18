@@ -10,7 +10,7 @@ namespace Payment_api.Domain.Entities
         public string Email { get; private set; } = string.Empty;
         public string Cpf { get; private set; } = string.Empty;
 
-        /*EF Relation*/
+        /* Navigation property EF */
         public IEnumerable<PhoneEntity> Phones { get; set; } = new List<PhoneEntity>();
 
         public SellerEntity(string name, string email, string cpf)

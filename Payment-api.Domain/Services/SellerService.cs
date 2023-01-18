@@ -1,6 +1,6 @@
 using Payment_api.Domain.Entities;
 using Payment_api.Domain.Interfaces.Repositories;
-using Payment_api.Domain.Services.Interfaces;
+using Payment_api.Domain.Interfaces.Services;
 using Payment_api.Domain.Validation;
 
 namespace Payment_api.Domain.Services

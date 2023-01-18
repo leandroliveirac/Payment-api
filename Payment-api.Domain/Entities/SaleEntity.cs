@@ -3,7 +3,7 @@ using Payment_api.Domain.Validation;
 
 namespace Payment_api.Domain.Entities
 {
-    public class SaleEntity : BaseEntity
+    public sealed class SaleEntity : BaseEntity
     {      
 
         public DateTime Moment { get; private set; }
@@ -11,8 +11,9 @@ namespace Payment_api.Domain.Entities
         public Guid SellerId { get; private set; }
         public Guid OrderId { get; private set; }
 
-        public virtual OrderEntity? Order { get; set; }
-        public virtual SellerEntity? Seller { get; set; }
+        /* Navigation property EF */
+        public OrderEntity Order { get; set; }
+        public SellerEntity Seller { get; set; }
 
         public SaleEntity(Guid sellerId, Guid orderId)
         {
@@ -31,15 +32,15 @@ namespace Payment_api.Domain.Entities
                     DomainExceptionValidation.When(status != SaleStatus.CANCELED,"Invalid transaction. Generate new sale");
                     break;
                 case SaleStatus.AWAITING_PAYMENT:
-                    DomainExceptionValidation.When(status != SaleStatus.PAYMENT_ACCEPT && status != SaleStatus.CANCELED,
+                    DomainExceptionValidation.When(status != SaleStatus.AWAITING_PAYMENT && status != SaleStatus.PAYMENT_ACCEPT && status != SaleStatus.CANCELED,
                                 "Invalid transaction, update : awaiting payment for approved payment or awaiting payment for canceled sale");
                     break;
                 case SaleStatus.PAYMENT_ACCEPT:
-                    DomainExceptionValidation.When(status != SaleStatus.SENT_CARRIER && status != SaleStatus.CANCELED,
+                    DomainExceptionValidation.When(status != SaleStatus.PAYMENT_ACCEPT && status != SaleStatus.SENT_CARRIER && status != SaleStatus.CANCELED,
                                 "Invalid transaction, update: approved payment for Shipped to Carrier or approved payment for canceled sale");
                     break;
                 case SaleStatus.SENT_CARRIER:
-                    DomainExceptionValidation.When(status != SaleStatus.DELIVERED,
+                    DomainExceptionValidation.When(status != SaleStatus.SENT_CARRIER && status != SaleStatus.DELIVERED,
                                 "Invalid transaction, Update: Shipped to Carrier for Delivered");
                     break;
                 default:
@@ -52,7 +53,7 @@ namespace Payment_api.Domain.Entities
         private void Validate(Guid sellerId, Guid orderId)
         {            
             DomainExceptionValidation.When(sellerId == Guid.Empty, "Invalid sellerId value");
-            DomainExceptionValidation.When(orderId == Guid.Empty, "Invalid order value");            
+            DomainExceptionValidation.When(orderId == Guid.Empty, "Invalid order value");           
         }
 
     }

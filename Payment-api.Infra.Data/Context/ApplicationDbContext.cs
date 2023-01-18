@@ -7,6 +7,8 @@ namespace Payment_api.Infra.Data.Context
     {
         public ApplicationDbContext(DbContextOptions options) : base(options)
         {
+            this.ChangeTracker.LazyLoadingEnabled = true;
+            
         }
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)

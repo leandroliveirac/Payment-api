@@ -70,22 +70,5 @@ namespace Payment_api.WebAPI.Controllers
                 return BadRequest($"An error occurred while trying to execute your request: \n {ex.InnerException?.Message ?? ex.Message}");
             }
         }
-
-        [HttpDelete("{id:Guid}")]
-        [ProducesResponseType(StatusCodes.Status204NoContent)]
-        [ProducesResponseType(StatusCodes.Status400BadRequest)]
-        public IActionResult Delete([FromRoute] Guid id)
-        {
-            try
-            {
-                _sellerService.Remove(id);
-                return NoContent();
-            }
-            catch (Exception ex)
-            {                
-                return BadRequest($"An error occurred while trying to execute your request: \n {ex.InnerException?.Message ?? ex.Message}");
-            }
-        }
-
     }
 }

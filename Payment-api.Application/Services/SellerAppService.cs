@@ -4,7 +4,7 @@ using Payment_api.Application.Interfaces.Services;
 using Payment_api.Application.ViewModels;
 using Payment_api.Domain.Entities;
 using Payment_api.Domain.Interfaces.Repositories;
-using Payment_api.Domain.Services.Interfaces;
+using Payment_api.Domain.Interfaces.Services;
 using Payment_api.Domain.Validation;
 
 namespace Payment_api.Application.Services
@@ -42,23 +42,16 @@ namespace Payment_api.Application.Services
 
         public async Task<SellerViewModel> CreateAsync(SellerInputModel entity)
         {
-            try
-            {
-                HasPhones(entity.Phones);
+            HasPhones(entity.Phones);
 
-                var seller = _mapper.Map<SellerInputModel, SellerEntity>(entity, opt => 
-                    {
-                        opt.BeforeMap((src,dest) => src.Phones.ToList().ForEach(x => {x.Id = Guid.Empty;}));
-                    });
-
-                await _sellerService.CreateAsync(seller);
-                
-                return _mapper.Map<SellerViewModel>(seller);
-            }
-            catch
+            var seller = _mapper.Map<SellerInputModel, SellerEntity>(entity, opt =>
             {
-                throw;
-            }
+                opt.BeforeMap((src, dest) => src.Phones.ToList().ForEach(x => { x.Id = Guid.Empty; }));
+            });
+
+            await _sellerService.CreateAsync(seller);
+
+            return _mapper.Map<SellerViewModel>(seller);
         }
 
         public void Remove(Guid id)

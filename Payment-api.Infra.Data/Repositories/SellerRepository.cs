@@ -35,5 +35,11 @@ namespace Payment_api.Infra.Data.Repositories
             return await _context.Sellers.Include(x => x.Phones).AsNoTracking()
                                                                 .FirstOrDefaultAsync(x => x.Id == id);
         }
+
+        public async Task<bool>HasSeller(Guid id)
+        {
+            return await _context.Sellers.AsNoTracking()
+                                    .AnyAsync(s => s.Id == id);
+        }
     }
 }

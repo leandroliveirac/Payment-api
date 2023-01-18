@@ -9,5 +9,8 @@ namespace Payment_api.Application.Interfaces.Services
         Task<OrderViewModel> GetByIdAsync(Guid id);
         Task<OrderViewModel> CreateAsync(OrderInputModel entity);
         void Canceled(Guid id);
+        void Returned(Guid id);
+        void Sent(Guid id);
+        void Delivered(Guid id);
     }
 }
