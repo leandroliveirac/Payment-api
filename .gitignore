@@ -458,4 +458,4 @@ $RECYCLE.BIN/
 *.sqlite
 
 ## Appsetting
-appsettings.*
+appsettings.json
