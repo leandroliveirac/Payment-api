@@ -6,11 +6,6 @@
     <ImplicitUsings>enable</ImplicitUsings>
     <Nullable>disable</Nullable>
   </PropertyGroup>
-
-  <ItemGroup>
-    <ProjectReference Include="..\payment-api.Domain\payment-api.Domain.csproj" />
-  </ItemGroup>
-
   <ItemGroup>
     <PackageReference Include="Microsoft.EntityFrameworkCore.Design" Version="6.0.11">
       <PrivateAssets>none</PrivateAssets>
@@ -26,6 +21,10 @@
 
   <ItemGroup>
     <Folder Include="EntitiesConfiguration\Enums\" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\Payment-api.Domain\Payment-api.Domain.csproj" />
   </ItemGroup>
 
 </Project>
