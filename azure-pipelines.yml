@@ -23,7 +23,10 @@ stages:
     - task: Docker@2
       displayName: Build an image
       inputs:
-        command: build
+        containerRegistry: 'DockerHub'
+        repository: 'leandroparipe/api-payment'
+        command: buildAndPush
         dockerfile: '$(Build.SourcesDirectory)/src/Payment-api.WebAPI/Dockerfile'
+        buildContext: '.'
         tags: |
           $(tag)
