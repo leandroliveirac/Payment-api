@@ -16,9 +16,13 @@ namespace Payment_api.Infra.IOC
     {
         public static IServiceCollection AddInfrastructure(this IServiceCollection services, IConfiguration configuration)
         {
+            var connection = configuration.GetConnectionString("Mysql");
             services.AddDbContext<ApplicationDbContext>(options =>
-                options.UseSqlite(configuration.GetConnectionString("SQlite"),
-                m => m.MigrationsAssembly(typeof(ApplicationDbContext).Assembly.FullName)));                
+                options.UseMySql(connection,ServerVersion.AutoDetect(connection)
+                // ,m => m.MigrationsAssembly(typeof(ApplicationDbContext).Assembly.FullName)
+                ,m => m.MigrationsAssembly("Payment-api.WebAPI")
+                )
+            );                
 
             #region Repositories
             services.AddScoped<ICategoryRepository,CategoryRepository>();
