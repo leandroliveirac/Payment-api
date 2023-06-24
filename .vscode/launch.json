@@ -10,9 +10,9 @@
             "request": "launch",
             "preLaunchTask": "build",
             // If you have changed target frameworks, make sure to update the program path.
-            "program": "${workspaceFolder}/Payment-api.WebAPI/bin/Debug/net6.0/Payment-api.WebAPI.dll",
+            "program": "${workspaceFolder}/src/Payment-api.WebAPI/bin/Debug/net6.0/Payment-api.WebAPI.dll",
             "args": [],
-            "cwd": "${workspaceFolder}/Payment-api.WebAPI",
+            "cwd": "${workspaceFolder}/src/Payment-api.WebAPI",
             "stopAtEntry": false,
             // Enable launching a web browser when ASP.NET Core starts. For more information: https://aka.ms/VSCode-CS-LaunchJson-WebBrowser
             "serverReadyAction": {

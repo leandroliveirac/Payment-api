@@ -7,7 +7,7 @@
             "type": "process",
             "args": [
                 "build",
-                "${workspaceFolder}/Payment-api.WebAPI/Payment-api.WebAPI.csproj",
+                "${workspaceFolder}/src/Payment-api.WebAPI/Payment-api.WebAPI.csproj",
                 "/property:GenerateFullPaths=true",
                 "/consoleloggerparameters:NoSummary"
             ],
@@ -19,7 +19,7 @@
             "type": "process",
             "args": [
                 "publish",
-                "${workspaceFolder}/Payment-api.WebAPI/Payment-api.WebAPI.csproj",
+                "${workspaceFolder}/src/Payment-api.WebAPI/Payment-api.WebAPI.csproj",
                 "/property:GenerateFullPaths=true",
                 "/consoleloggerparameters:NoSummary"
             ],
@@ -33,7 +33,7 @@
                 "watch",
                 "run",
                 "--project",
-                "${workspaceFolder}/Payment-api.WebAPI/Payment-api.WebAPI.csproj"
+                "${workspaceFolder}/src/Payment-api.WebAPI/Payment-api.WebAPI.csproj"
             ],
             "problemMatcher": "$msCompile"
         }
