@@ -24,7 +24,7 @@ stages:
       displayName: Build an image
       inputs:
         containerRegistry: 'DockerHub'
-        repository: 'leandroparipe/api-payment'
+        repository: 'leandroparipe/paymentapiwebapi'
         command: buildAndPush
         dockerfile: '$(Build.SourcesDirectory)/src/Payment-api.WebAPI/Dockerfile'
         buildContext: '.'
