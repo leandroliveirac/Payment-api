@@ -19,7 +19,6 @@ namespace Payment_api.Infra.IOC
             var connection = configuration.GetConnectionString("Mysql");
             services.AddDbContext<ApplicationDbContext>(options =>
                 options.UseMySql(connection,ServerVersion.AutoDetect(connection)
-                // ,m => m.MigrationsAssembly(typeof(ApplicationDbContext).Assembly.FullName)
                 ,m => m.MigrationsAssembly("Payment-api.WebAPI")
                 )
             );                

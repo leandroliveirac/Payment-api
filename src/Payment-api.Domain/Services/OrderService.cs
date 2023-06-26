@@ -65,22 +65,33 @@ namespace Payment_api.Domain.Services
             var sale = _saleRepository.GetByOrder(id).Result;
             DomainExceptionValidation.When(sale != null && sale.Status != SaleStatus.AWAITING_PAYMENT, "There is an active sales transaction. Cancel the sale");            
             
-            _saleService.Canceled(sale.Id);
+            if(sale == null)
+            {
+                order.UpdateStatus(OrderStatus.CANCELED);
+                _orderRepository.Update(order);
+            }
+            else
+                _saleService.Canceled(sale.Id);
         }        
 
         public void Returned(Guid id)
         {
             var order = _orderRepository.GetByIdAsync(id).Result;            
             DomainExceptionValidation.When(order == null,"Not found");
+
+            DomainExceptionValidation.When(order.Status.Equals(OrderStatus.CANCELED),"Order is canceled");
+            DomainExceptionValidation.When(order.Status != OrderStatus.DELIVERED,"Invalid transaction. The order has not been delivered");
             
             var sale = _saleRepository.GetByOrder(id).Result;
-            DomainExceptionValidation.When(sale != null && sale.Status != SaleStatus.DELIVERED, "There is an active sales transaction. Cancel the sale");
+            if(sale != null)
+            {
+                DomainExceptionValidation.When(sale.Status != SaleStatus.DELIVERED, "There is an active sales transaction. Cancel the sale");
             
             sale.UpdateStatus(SaleStatus.PAYMENT_ACCEPT);
             _saleRepository.Update(sale);
-
-            order?.UpdateStatus(Domain.Enums.OrderStatus.RETURNED);
-
+            }
+            
+            order.UpdateStatus(OrderStatus.RETURNED);
             _orderRepository.Update(order);
         }  
         
@@ -89,11 +100,15 @@ namespace Payment_api.Domain.Services
             var order = _orderRepository.GetByIdAsync(id).Result;            
             DomainExceptionValidation.When(order == null,"Not found");           
             
+            DomainExceptionValidation.When(order.Status.Equals(OrderStatus.CANCELED),"Order is canceled");
+            DomainExceptionValidation.When(order.Status != OrderStatus.PAYMENT_ACCEPT,"Invalid transaction. Order awaiting payment");
+
             var sale = _saleRepository.GetByOrder(id).Result;
             
             DomainExceptionValidation.When(sale != null && (sale.Status != SaleStatus.SENT_CARRIER && 
                                                             sale.Status != SaleStatus.PAYMENT_ACCEPT), 
                                                             "The order can only be shipped when the sale status is payment approved");
+
             _saleService.SentCarrier(sale.Id);          
         }
 
@@ -102,6 +117,9 @@ namespace Payment_api.Domain.Services
             var order = _orderRepository.GetByIdAsync(id).Result;            
             DomainExceptionValidation.When(order == null,"Not found");           
             
+            DomainExceptionValidation.When(order.Status.Equals(OrderStatus.CANCELED),"Order is canceled");
+            DomainExceptionValidation.When(order.Status != OrderStatus.SENT,"Invalid transaction. Order has not been sent");
+
             var sale = _saleRepository.GetByOrder(id).Result;
             
             DomainExceptionValidation.When(sale != null && sale.Status != SaleStatus.SENT_CARRIER, "Check the status of the sale");
