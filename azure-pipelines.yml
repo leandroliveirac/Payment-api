@@ -30,3 +30,12 @@ stages:
         buildContext: '.'
         tags: |
           $(tag)
+- task: AzureRmWebAppDeployment@4
+  inputs:
+    ConnectionType: 'AzureRM'
+    azureSubscription: 'Azure Demo'
+    appType: 'webAppContainer'
+    WebAppName: 'payment-starging'
+    DockerNamespace: 'leandroparipe'
+    DockerRepository: 'paymentapiwebapi'
+    DockerImageTag: '$(Build.BuildId)'
