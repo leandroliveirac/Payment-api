@@ -12,5 +12,8 @@ steps:
     containerRegistry: 'DockerHub'
     repository: 'leandroparipe'
     command: 'buildAndPush'
-    Dockerfile: './src/Payment-api.WebAPI/Dockerfile'
+    Dockerfile: '$(Build.SourcesDirectory)/src/Payment-api.WebAPI/Dockerfile'
     buildContext: '.'
+    tags: |
+          $(Build.BuildId)
+          latest
