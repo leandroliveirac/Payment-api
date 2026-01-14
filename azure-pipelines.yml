@@ -18,10 +18,11 @@ steps:
           $(Build.BuildId)
           latest
 
-- task: AzureRmWebAppDeployment@4
+
+- task: AzureRmWebAppDeployment@5
   inputs:
     ConnectionType: 'AzureRM'
-    azureSubscription: 'Azure Demo'
+    azureSubscription: 'Assinatura 1(a9e610f2-1bae-47a2-a329-aa8f581a2579)'
     appType: 'webAppContainer'
     WebAppName: 'payment-starging'
     DockerNamespace: 'leandroparipe'
