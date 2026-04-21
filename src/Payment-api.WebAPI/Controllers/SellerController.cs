@@ -5,10 +5,7 @@ using Payment_api.Application.ViewModels;
 
 namespace Payment_api.WebAPI.Controllers
 {
-    [ApiController]
-    [Route("api-docs/[controller]")]
-    [Produces("application/json")]
-    public class SellerController : ControllerBase
+    public class SellerController : MainController
     {
         private readonly ISellerAppService _sellerService;
 
@@ -18,8 +15,8 @@ namespace Payment_api.WebAPI.Controllers
         }
 
         [HttpGet]
-        [ProducesResponseType(StatusCodes.Status200OK)]
-        public async Task<ActionResult<IEnumerable<SellerViewModel>>>GetAll()
+        [ProducesResponseType(typeof(IEnumerable<SellerViewModel>),StatusCodes.Status200OK)]
+        public async Task<IActionResult>GetAll()
         {
             var seller = await _sellerService.GetAllAsync();           
             return Ok(seller);
@@ -27,9 +24,9 @@ namespace Payment_api.WebAPI.Controllers
 
         [HttpGet]
         [Route("{id:Guid}", Name = "getSellerById")]
-        [ProducesResponseType(StatusCodes.Status200OK)]
-        [ProducesResponseType(StatusCodes.Status404NotFound)]
-        public async Task<ActionResult<SellerViewModel>> GetByIdAsync([FromRoute] Guid id)
+        [ProducesResponseType(typeof(SellerViewModel),StatusCodes.Status200OK)]
+        [ProducesResponseType(typeof(ValidationProblemDetails),StatusCodes.Status404NotFound)]
+        public async Task<IActionResult> GetByIdAsync([FromRoute] Guid id)
         {
             var seller = await _sellerService.GetByIdAsync(id);
 
@@ -40,8 +37,8 @@ namespace Payment_api.WebAPI.Controllers
         }
 
         [HttpPost]        
-        [ProducesResponseType(StatusCodes.Status201Created)]
-        [ProducesResponseType(StatusCodes.Status400BadRequest)]
+        [ProducesResponseType(typeof(SellerViewModel),StatusCodes.Status201Created)]
+        [ProducesResponseType(typeof(ValidationProblemDetails),StatusCodes.Status400BadRequest)]
         public async Task<IActionResult> CreateAsync([FromBody] SellerInputModel entity)
         {
             try
@@ -56,13 +53,13 @@ namespace Payment_api.WebAPI.Controllers
         }
 
         [HttpPut("{id:Guid}")]
-        [ProducesResponseType(StatusCodes.Status201Created)]
-        [ProducesResponseType(StatusCodes.Status400BadRequest)]
-        public ActionResult<SellerViewModel> Update([FromRoute] Guid id, [FromBody] SellerInputModel entity)
+        [ProducesResponseType(typeof(SellerViewModel),StatusCodes.Status201Created)]
+        [ProducesResponseType(typeof(ValidationProblemDetails),StatusCodes.Status400BadRequest)]
+        public async Task<IActionResult> Update([FromRoute] Guid id, [FromBody] SellerInputModel entity)
         {
             try
             {
-                var seller = _sellerService.Update(entity, id);
+                var seller = await _sellerService.UpdateAsync(entity, id);
                 return CreatedAtRoute("getSellerById", new { id = seller.Id }, seller);
             }
             catch (Exception ex)

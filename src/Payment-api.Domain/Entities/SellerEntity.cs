@@ -1,4 +1,3 @@
-using System;
 using System.Text.RegularExpressions;
 using Payment_api.Domain.Validation;
 
@@ -6,12 +5,12 @@ namespace Payment_api.Domain.Entities
 {
     public sealed class SellerEntity : BaseEntity
     {
-        public string Name { get; private set; } = string.Empty;
-        public string Email { get; private set; } = string.Empty;
-        public string Cpf { get; private set; } = string.Empty;
+        public string Name { get; private set; }
+        public string Email { get; private set; }
+        public string Cpf { get; private set; }
 
         /* Navigation property EF */
-        public IEnumerable<PhoneEntity> Phones { get; set; } = new List<PhoneEntity>();
+        public IEnumerable<PhoneEntity>? Phones { get; set; }
 
         public SellerEntity(string name, string email, string cpf)
         {
@@ -29,7 +28,7 @@ namespace Payment_api.Domain.Entities
             Cpf = cpf;
         }
 
-        private void Validate(string name, string email, string cpf)
+        private static void Validate(string name, string email, string cpf)
         {
             
             DomainExceptionValidation.When(string.IsNullOrEmpty(name), "Invalid name. Name is required");

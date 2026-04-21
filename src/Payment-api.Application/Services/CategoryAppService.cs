@@ -1,8 +1,7 @@
-﻿using AutoMapper;
+﻿using Payment_api.Application.Extensions.Mappings;
 using Payment_api.Application.InputModels;
 using Payment_api.Application.Interfaces.Services;
 using Payment_api.Application.ViewModels;
-using Payment_api.Domain.Entities;
 using Payment_api.Domain.Interfaces.Repositories;
 using Payment_api.Domain.Validation;
 
@@ -11,58 +10,56 @@ namespace Payment_api.Application.Services
     public class CategoryAppService : ICategoryAppService
     {
         private readonly ICategoryRepository _categoryRepository;
-        private readonly IMapper _mapper;
 
-        public CategoryAppService(ICategoryRepository categoryRepository, IMapper mapper)
+        public CategoryAppService(ICategoryRepository categoryRepository)
         {
             _categoryRepository = categoryRepository;
-            _mapper = mapper;
         }
 
         public async Task<IEnumerable<CategoryViewModel>> GetAllAsync()
         {
             var categories = await _categoryRepository.GetAllAsync();
-            return _mapper.Map<IEnumerable<CategoryViewModel>>(categories);
+            return categories.MapParaListCategoryViewModel();
         }
 
         public async Task<CategoryViewModel> GetByDescriptionAsync(string description)
         {
             var category = await _categoryRepository.GetByDescriptionAsync(description);
-            return _mapper.Map<CategoryViewModel>(category);
+            return category.MapParaCategoryViewModel();
         }
 
         public async Task<CategoryViewModel> GetByIdAsync(Guid id)
         {
             IsValid(id);
             var category = await _categoryRepository.GetByIdAsync(id);
-            return _mapper.Map<CategoryViewModel>(category);
+            return category.MapParaCategoryViewModel();
         }
 
         public async Task<CategoryViewModel> CreateAsync(CategoryInputModel entity)
         {    
             DomainExceptionValidation.When(await _categoryRepository.GetByDescriptionAsync(entity.Description) != null, "There is category with this description!");
             
-            var category = _mapper.Map<CategoryEntity>(entity);                 
+            var category = entity.MapParaCategoryEntity();                 
 
             await _categoryRepository.CreateAsync(category);
 
-            return _mapper.Map<CategoryViewModel>(category);
+            return category.MapParaCategoryViewModel();
         }
 
-        public void Remove(Guid id)
+        public async Task RemoveAsync(Guid id)
         {
             IsValid(id);
-            var category =  _categoryRepository.GetByIdAsync(id).Result;
+            var category = await  _categoryRepository.GetByIdAsync(id);
 
             DomainExceptionValidation.When(category == null,"Not found");
             
             _categoryRepository.Remove(category);
         }
 
-        public CategoryViewModel Update(Guid id, CategoryInputModel entity)
+        public async Task<CategoryViewModel> UpdateAsync(Guid id, CategoryInputModel entity)
         {
             IsValid(id);
-            var category = _categoryRepository.GetByIdAsync(id).Result;
+            var category = await _categoryRepository.GetByIdAsync(id);
 
             DomainExceptionValidation.When(category == null, "Not found");
 
@@ -70,7 +67,7 @@ namespace Payment_api.Application.Services
 
             _categoryRepository.Update(category);
 
-            return _mapper.Map<CategoryViewModel>(category);
+            return category.MapParaCategoryViewModel();
         }
         private void IsValid(Guid id)
         {

@@ -8,7 +8,7 @@ namespace Payment_api.Application.Interfaces.Services
         Task<IEnumerable<SellerViewModel>> GetAllAsync();
         Task<SellerViewModel> GetByIdAsync(Guid id);
         Task<SellerViewModel> CreateAsync(SellerInputModel entity);
-        SellerViewModel Update(SellerInputModel entity, Guid id);
-        void Remove(Guid id);
+        Task<SellerViewModel> UpdateAsync(SellerInputModel entity, Guid id);
+        Task RemoveAsync(Guid id);
     }
 }

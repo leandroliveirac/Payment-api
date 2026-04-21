@@ -5,10 +5,7 @@ using Payment_api.Application.ViewModels;
 
 namespace Payment_api.WebAPI.Controllers
 {
-    [ApiController]
-    [Route("api-docs/[controller]")]
-    [Produces("application/json")]
-    public class OrderController : ControllerBase
+    public class OrderController : MainController
     {
         private readonly IOrderAppService _orderService;
 

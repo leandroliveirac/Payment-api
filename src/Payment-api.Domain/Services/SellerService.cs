@@ -21,7 +21,7 @@ namespace Payment_api.Domain.Services
             var sellers = await _sellerRepository.GetAllAsync();
 
             if(sellers == null || sellers.Count() <= 0) 
-                return Enumerable.Empty<SellerEntity>();
+                return [];
 
             return sellers;
         }
@@ -60,38 +60,40 @@ namespace Payment_api.Domain.Services
             if(seller != null)                
                 DomainExceptionValidation.When( seller.Cpf == entity.Cpf && seller.Id != idSeller,"There is seller with this CPF!");
             DomainExceptionValidation.When( _sellerRepository.ThereIsEmail(entity.Email,idSeller).Result,"There is seller with this E-mail!");
-            DomainExceptionValidation.When( entity.Phones.GroupBy(p => (p.Ddd,p.Number,p.Type)).Count() != entity.Phones.Count(),"No duplicate phone allowed!");
+            DomainExceptionValidation.When( entity.Phones?.GroupBy(p => (p.Ddd,p.Number,p.Type)).Count() != entity.Phones?.Count(),"No duplicate phone allowed!");
         }
 
         private IEnumerable<PhoneEntity> UpdatePhones(IEnumerable<PhoneEntity> currentPhones, IEnumerable<PhoneEntity> newPhones)
         {
-            var addNewPhones = new List<PhoneEntity>();
-            var removePhones = new List<PhoneEntity>();
-            var phones = new List<PhoneEntity>();
+            List<PhoneEntity> addNewPhones = [];
+            List<PhoneEntity> removePhones = [];
+            List<PhoneEntity> phones = [];
 
-            newPhones.ToList().ForEach( p => {
-            var phone = currentPhones.FirstOrDefault(x => x.Id == p.Id);
-            if(phone == null)
+            foreach (var item in newPhones)
             {
-                var duplicatePhone = currentPhones.Any(x => x.Ddd == p.Ddd && x.Number == p.Number && x.Type == p.Type);
-                if(!duplicatePhone)                 
-                    addNewPhones.Add(new PhoneEntity(p.Ddd,p.Number,p.Type,currentPhones.First().Id));
-                else
-                    DomainExceptionValidation.When(duplicatePhone,$"No duplicate phone allowed!");
-            }            
-            });
-
-            currentPhones.ToList().ForEach( p => {
-            var phone = newPhones.FirstOrDefault(x => x.Id == p.Id);                
-            if(phone != null)
-            {
-                p.Update(phone.Ddd,phone.Number,phone.Type);
+                var phone = currentPhones.FirstOrDefault(x => x.Id == item.Id);
+                if(phone == null)
+                {
+                    var duplicatePhone = currentPhones.Any(x => x.Ddd == item.Ddd && x.Number == item.Number && x.Type == item.Type);
+                    if(!duplicatePhone)                 
+                        addNewPhones.Add(new PhoneEntity(item.Ddd,item.Number,item.Type,Guid.Empty));
+                    else
+                        DomainExceptionValidation.When(duplicatePhone,$"No duplicate phone allowed!");
+                }
             }
-            else
+
+            foreach (var item in currentPhones)
             {
-                removePhones.Add(p);
-            }              
-            });           
+                var phone = newPhones.FirstOrDefault(x => x.Id == item.Id);                
+                if(phone != null)
+                {
+                    item.Update(phone.Ddd,phone.Number,phone.Type);
+                }
+                else
+                {
+                    removePhones.Add(item);
+                }
+            }         
 
             phones.AddRange(currentPhones.Except(removePhones));
             phones.AddRange(addNewPhones);

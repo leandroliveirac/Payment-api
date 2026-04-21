@@ -1,4 +1,4 @@
-﻿using AutoMapper;
+﻿using Payment_api.Application.Extensions.Mappings;
 using Payment_api.Application.InputModels;
 using Payment_api.Application.Interfaces.Services;
 using Payment_api.Application.ViewModels;
@@ -13,12 +13,10 @@ namespace Payment_api.Application.Services
     {
         private readonly ISellerRepository _sellerRepository;
         private readonly ISellerService _sellerService;
-        private readonly IMapper _mapper;
 
-        public SellerAppService(ISellerRepository sellerRepository, IMapper mapper, ISellerService sellerService)
+        public SellerAppService(ISellerRepository sellerRepository, ISellerService sellerService)
         {
             _sellerRepository = sellerRepository;
-            _mapper = mapper;
             _sellerService = sellerService;
         }
 
@@ -26,7 +24,7 @@ namespace Payment_api.Application.Services
         {
             var sellers = await _sellerRepository.GetAllAsync();
 
-            return _mapper.Map<IEnumerable<SellerViewModel>>(sellers);
+            return sellers.MapParaListSellerViewModel();
         }
 
         public async Task<SellerViewModel> GetByIdAsync(Guid id)
@@ -37,59 +35,52 @@ namespace Payment_api.Application.Services
 
             if(seller == null) return null;
 
-            return _mapper.Map<SellerViewModel>(seller);
+            return seller.MapParaSellerViewModel();
         }
 
         public async Task<SellerViewModel> CreateAsync(SellerInputModel entity)
         {
             HasPhones(entity.Phones);
 
-            var seller = _mapper.Map<SellerInputModel, SellerEntity>(entity, opt =>
-            {
-                opt.BeforeMap((src, dest) => src.Phones.ToList().ForEach(x => { x.Id = Guid.Empty; }));
-            });
+            var sellerEntity = entity.MapParaSellerEntity();
 
-            await _sellerService.CreateAsync(seller);
+            var sellerResult = await _sellerService.CreateAsync(sellerEntity);
 
-            return _mapper.Map<SellerViewModel>(seller);
+            return sellerResult.MapParaSellerViewModel();
         }
 
-        public void Remove(Guid id)
+        public async Task RemoveAsync(Guid id)
         {
             IsValid(id);
             
-            SellerEntity seller = GetById(id);
+            var seller = await _sellerRepository.GetByIdAsync(id);
+
+            DomainExceptionValidation.When(seller == null, "Seller not found");
 
             _sellerService.Remove(seller);
         }
 
-        public SellerViewModel Update(SellerInputModel entity, Guid id)
+        public async Task<SellerViewModel> UpdateAsync(SellerInputModel entity, Guid id)
         {
             IsValid(id);
 
             HasPhones(entity.Phones);
 
-            SellerEntity seller = GetById(id);
-
-            _sellerService.Update(seller, _mapper.Map<SellerEntity>(entity));
-
-            return _mapper.Map<SellerViewModel>(seller);
-        }
-
-        private SellerEntity GetById(Guid id)
-        {
-            var seller = _sellerRepository.GetByIdAsync(id).Result;
+            var seller = await _sellerRepository.GetByIdAsync(id);
 
             DomainExceptionValidation.When(seller == null, "Seller not found");
-            return seller;
+
+            _sellerService.Update(seller, entity.MapParaSellerEntity());
+
+            return seller.MapParaSellerViewModel();
         }
 
-        private void HasPhones(IEnumerable<PhoneInputModel> phones)
+        private static void HasPhones(IEnumerable<PhoneInputModel> phones)
         {
             DomainExceptionValidation.When(phones == null || phones.Count() <= 0, "Phone is required. Enter at least one phone number");
         }
 
-        private void IsValid(Guid id)
+        private static void IsValid(Guid id)
         {
             DomainExceptionValidation.When(id == Guid.Empty, "Invalid argument");
         }

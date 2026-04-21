@@ -1,13 +1,8 @@
 using Payment_api.Infra.IOC;
+using Payment_api.WebAPI.Extensions;
 using System.Text.Json.Serialization;
 
 var builder = WebApplication.CreateBuilder(args);
-
-builder.Configuration
-        .SetBasePath(builder.Environment.ContentRootPath)
-        .AddJsonFile("appsettings.json",true,true)
-        .AddJsonFile($"appsettings{builder.Environment.EnvironmentName}.json",true,true)
-        .AddEnvironmentVariables();
 
 // Add services to the container.
 builder.Services.AddInfrastructure(builder.Configuration);
@@ -17,18 +12,15 @@ builder.Services.AddControllers().AddJsonOptions(op =>
     op.JsonSerializerOptions.Converters.Add(new JsonStringEnumConverter());
 });
 
-// Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
 builder.Services.AddEndpointsApiExplorer();
-builder.Services.AddSwaggerGen();
+builder.Services.AddProblemDetails();
+builder.Services.AddSwaggerDocs();
+builder.Services.AddScalar();
 
 var app = builder.Build();
 
-app.UseSwagger();
-app.UseSwaggerUI(c =>
-{
-    c.RoutePrefix = string.Empty;
-    c.SwaggerEndpoint("/swagger/v1/swagger.json", "V1");
-});
+app.UseSwaggerDocs();
+app.UseScalarDocs();
 
 app.UseHttpsRedirection();
 

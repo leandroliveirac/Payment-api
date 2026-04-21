@@ -2,7 +2,6 @@ using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Payment_api.Application.Interfaces.Services;
-using Payment_api.Application.Mappers;
 using Payment_api.Application.Services;
 using Payment_api.Domain.Interfaces.Repositories;
 using Payment_api.Domain.Interfaces.Services;
@@ -45,8 +44,6 @@ namespace Payment_api.Infra.IOC
             services.AddScoped<ISaleAppService,SaleAppService>();            
             #endregion
         
-            services.AddAutoMapper(typeof(MapperConfigProfile));
-
             return services;
         }
     }

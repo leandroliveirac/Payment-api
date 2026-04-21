@@ -5,10 +5,7 @@ using Payment_api.Application.ViewModels;
 
 namespace Payment_api.WebAPI.Controllers
 {
-    [ApiController]
-    [Route("api-docs/[controller]")]
-    [Produces("application/json")]
-    public class CategoryController : ControllerBase
+    public class CategoryController : MainController
     {
         private readonly ICategoryAppService _categoryAppService;
 
@@ -17,10 +14,16 @@ namespace Payment_api.WebAPI.Controllers
             _categoryAppService = categoryAppService;
         }
 
+
+        /// <summary>
+        /// Lista categorias
+        /// </summary>
+        /// <response code="200">Retorna uma lista de categoria.</response>
+        /// <response code="404">Não encontrado.</response>
         [HttpGet]
-        [ProducesResponseType(StatusCodes.Status200OK)]
-        [ProducesResponseType(StatusCodes.Status404NotFound)]
-        public async Task<ActionResult<IEnumerable<CategoryViewModel>>> GetAllAsync()
+        [ProducesResponseType(typeof(IEnumerable<CategoryViewModel>),StatusCodes.Status200OK)]
+        [ProducesResponseType(typeof(ValidationProblemDetails),StatusCodes.Status404NotFound)]
+        public async Task<IActionResult> GetAllAsync()
         {
             var categories = await _categoryAppService.GetAllAsync();
 
@@ -30,11 +33,17 @@ namespace Payment_api.WebAPI.Controllers
             return Ok(categories);
         }
 
+        /// <summary>
+        /// Busca por descrição da categoria
+        /// </summary>
+        /// <param name="description">Descrição da categoria</param>
+        /// <response code="200"> Retorna categoria encontrada.</response>
+        /// <response code="404">Não encontrado.</response>
         [HttpGet]
         [Route("{description}",Name = "getByDescription")]
-        [ProducesResponseType(StatusCodes.Status200OK)]
-        [ProducesResponseType(StatusCodes.Status404NotFound)]
-        public async Task<ActionResult<CategoryViewModel>> GetByDescriptionAsync([FromRoute] string description)
+        [ProducesResponseType(typeof(CategoryViewModel),StatusCodes.Status200OK)]
+        [ProducesResponseType(typeof(ValidationProblemDetails),StatusCodes.Status404NotFound)]
+        public async Task<IActionResult> GetByDescriptionAsync([FromRoute] string description)
         {
             var category = await _categoryAppService.GetByDescriptionAsync(description);
 
@@ -44,14 +53,20 @@ namespace Payment_api.WebAPI.Controllers
             return Ok(category);
         }
 
+        /// <summary>
+        /// Adiciona categoria
+        /// </summary>
+        /// <param name="request">Categoria</param>
+        /// <response code="201"> Retorna categoria encontrada.</response>
+        /// <response code="400">Dados inválidos.</response>
         [HttpPost]
-        [ProducesResponseType(StatusCodes.Status201Created)]
-        [ProducesResponseType(StatusCodes.Status400BadRequest)]
-        public async Task<IActionResult> CreateAsync([FromBody] CategoryInputModel entity)
+        [ProducesResponseType(typeof(CategoryViewModel),StatusCodes.Status201Created)]
+        [ProducesResponseType(typeof(ValidationProblemDetails),StatusCodes.Status400BadRequest)]
+        public async Task<IActionResult> CreateAsync([FromBody] CategoryInputModel request)
         {
             try
             {
-                var category = await _categoryAppService.CreateAsync(entity);
+                var category = await _categoryAppService.CreateAsync(request);
                 return CreatedAtRoute("getByDescription", new {description = category.Description },category);
             }
             catch (Exception ex)
@@ -60,15 +75,23 @@ namespace Payment_api.WebAPI.Controllers
             }
         }
 
+
+        /// <summary>
+        /// Atualiza categoria
+        /// </summary>
+        /// <param name="request">Categoria</param>
+        /// <param name="id">codigo da categoria</param>
+        /// <response code="201"> Retorna categoria encontrada.</response>
+        /// <response code="400">Dados inválidos.</response>
         [HttpPut("{id:Guid}")]
-        [ProducesResponseType(StatusCodes.Status201Created)]
-        [ProducesResponseType(StatusCodes.Status400BadRequest)]
-        public IActionResult Update([FromRoute] Guid id, [FromBody] CategoryInputModel entity)
+        [ProducesResponseType(typeof(CategoryViewModel),StatusCodes.Status201Created)]
+        [ProducesResponseType(typeof(ValidationProblemDetails), StatusCodes.Status400BadRequest)]
+        public async Task<IActionResult> UpdateAsync([FromRoute] Guid id, [FromBody] CategoryInputModel request)
         {
             try
             {
-                var category = _categoryAppService.Update(id, entity);
-                return CreatedAtRoute("getByDescription", new { description = entity.Description }, category);
+                var category = await _categoryAppService.UpdateAsync(id, request);
+                return CreatedAtRoute("getByDescription", new { description = request.Description }, category);
             }
             catch (Exception ex)
             {

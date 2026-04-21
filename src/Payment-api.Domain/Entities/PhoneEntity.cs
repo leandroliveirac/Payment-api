@@ -41,7 +41,7 @@ namespace Payment_api.Domain.Entities
             DomainExceptionValidation.When(!Enum.IsDefined(typeof(PhoneType),type),"Invalid phone type. phone type is required");
             DomainExceptionValidation.When(string.IsNullOrEmpty(ddd),"Invalid ddd. DDD is required");
             DomainExceptionValidation.When(string.IsNullOrEmpty(number),"Invalid number. Number is required");
-            DomainExceptionValidation.When(sellerId == Guid.Empty, "Invalid sellerId. Seller is required");
+            // DomainExceptionValidation.When(sellerId == Guid.Empty, "Invalid sellerId. Seller is required");
 
             var _number = Regex.Match(number,"^[0-9]+$").ToString();
             DomainExceptionValidation.When(_number.Length != 8,"Invalid phone, enter 8 digits");

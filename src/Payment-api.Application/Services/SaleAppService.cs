@@ -1,8 +1,7 @@
-using AutoMapper;
+using Payment_api.Application.Extensions.Mappings;
 using Payment_api.Application.InputModels;
 using Payment_api.Application.Interfaces.Services;
 using Payment_api.Application.ViewModels;
-using Payment_api.Domain.Entities;
 using Payment_api.Domain.Enums;
 using Payment_api.Domain.Interfaces.Repositories;
 using Payment_api.Domain.Interfaces.Services;
@@ -15,12 +14,10 @@ namespace Payment_api.Application.Services
         private readonly ISaleRepository _saleRepository;
         private readonly IOrderRepository _orderRepository;
         private readonly ISaleService _saleService;
-        private readonly IMapper _mapper;
 
-        public SaleAppService(ISaleRepository saleRepository, IMapper mapper, IOrderRepository orderRepository, ISaleService saleService)
+        public SaleAppService(ISaleRepository saleRepository, IOrderRepository orderRepository, ISaleService saleService)
         {
             _saleRepository = saleRepository;
-            _mapper = mapper;
             _orderRepository = orderRepository;
             _saleService = saleService;
         }
@@ -29,7 +26,7 @@ namespace Payment_api.Application.Services
         {
             var sales = await _saleRepository.GetAllAsync();
             
-            return _mapper.Map<IEnumerable<SaleEntity>,IEnumerable<SaleViewModel>>(sales);
+            return sales.MapParaListSaleViewModel();
         }
 
         public async Task<SaleViewModel> GetByIdAsync(Guid id)
@@ -40,15 +37,15 @@ namespace Payment_api.Application.Services
             
             DomainExceptionValidation.When(sale == null, "Not found");
 
-            return _mapper.Map<SaleEntity,SaleViewModel>(sale);
+            return sale.MapParaSaleViewModel();
         }        
 
         public async Task<SaleViewModel> CreateAsync(SaleInputModel entity)
         {
-            var sale = _mapper.Map<SaleEntity>(entity);
+            var sale = entity.MapParaSaleEntity();
             await _saleService.CreateAsync(sale);
             
-            return _mapper.Map<SaleEntity,SaleViewModel>(sale);
+            return sale.MapParaSaleViewModel();
         }
 
         public void UpdateStatus(Guid id, string status)
@@ -84,7 +81,7 @@ namespace Payment_api.Application.Services
             _saleService.Delivered(id);
         }
 
-        private void IsValid(Guid id)
+        private static void IsValid(Guid id)
         {
             DomainExceptionValidation.When(id == Guid.Empty, "Invalid argument");
         }

@@ -4,10 +4,7 @@ using Payment_api.Application.Interfaces.Services;
 
 namespace Payment_api.WebAPI.Controllers
 {
-    [ApiController]
-    [Route("api-docs/[controller]")]
-    [Produces("application/json")]
-    public class ProductController : ControllerBase
+    public class ProductController : MainController
     {
         private readonly IProductAppService _productAppService;
 
